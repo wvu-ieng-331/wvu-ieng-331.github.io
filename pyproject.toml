@@ -1,0 +1,12 @@
+[project]
+name = "wvu-ieng-331-github-io"
+version = "0.1.0"
+description = "Course website for IENG 331: Computer Applications in Industrial Engineering"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipython>=8.31.0",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.0",
+    "plotly>=5.24.1",
+]

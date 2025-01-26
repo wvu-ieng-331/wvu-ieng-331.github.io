@@ -1,0 +1,48 @@
+project:
+  type: website
+  output-dir: docs
+
+license: CC BY-NC-ND
+
+execute: 
+  freeze: auto
+
+editor: source
+wrap: auto
+
+website:
+  title: "IENG 331: Computer Applications in Industrial Engineering"
+  favicon: images/flying-wv-gold.png
+  
+  page-navigation: true
+  back-to-top-navigation: true
+  bread-crumbs: false
+  site-url: wvu-ieng-331.github.io
+  
+  sidebar: 
+    style: floating
+    search: true
+    logo: images/logo-ieng-331.png
+    contents: auto
+
+format:
+  html:
+    theme:
+      - simplex
+      - brand
+    css: styles.css
+    smooth-scroll: true
+    link-external-icon: true
+    link-external-newwindow: true
+    other-links: false
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    toc-expand: true
+    page-layout: article
+    code-overflow: scroll
+    code-line-numbers: false
+    code-copy: true
+    highlight-style: nord
+
+brand: _brand.yml

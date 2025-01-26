@@ -1,0 +1,12 @@
+/* css styles */
+
+.sidebar-logo {
+    display: block;
+    /* Ensure it's treated as a block element */
+    margin: 0 auto;
+    /* Centers the image horizontally */
+}
+
+.sidebar-header {
+    text-align: center;
+}

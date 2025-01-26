@@ -1,0 +1,10 @@
+---
+title: "02 | Intro to Python"
+subtitle: "Learn about the basics of Python as well as how to use marimo."
+format: html
+order: 2
+---
+
+## Overview
+
+WIP

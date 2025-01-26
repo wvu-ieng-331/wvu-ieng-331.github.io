@@ -1,0 +1,89 @@
+---
+title: Instructor Info
+format: commonmark
+---
+
+## Program Educational Objectives
+
+Drawing from the University’s mission, the departmental mission, the needs of our constituents, and ABET Engineering Criteria, the following educational objectives were developed. Within a few years of graduation, an IE graduate...
+
+- Creates value by applying the appropriate industrial engineering methods and tools to organizations through critical and creative thinking, structured problem solving, analysis, evaluation, and improvement of systems and processes.
+- Communicates effectively across disciplines and cultures to influence decisions and lead activities in support of organizational goals and objectives.
+- On a continual basis, pursues professional development and inquiry via graduate study, continuing education and/or training and development through employer-based or industry/sector groups.
+- Works collaboratively as both a member and leader of cross-functional teams comprised of members with varying experience levels, organizational backgrounds, positions, and geographic locations.
+- Demonstrates ethical standards in designing and implementing innovative systems or processes taking into account social responsibility, global responsibility, and overall benefit to organizational constituents.
+
+## ABET Bachelor of Science in Industrial Engineering Major Learning Outcomes
+
+Upon graduation, all Bachelor of Science students in Industrial Engineering will have acquired the:
+
+1. an ability to identify, formulate, and solve complex engineering problems by applying principles of engineering, science, and mathematics
+2. an ability to apply engineering design to produce solutions that meet specified needs with consideration of public health, safety, and welfare, as well as global, cultural, social, environmental, and economic factors
+3. an ability to communicate effectively with a range of audiences
+4. an ability to recognize ethical and professional responsibilities in engineering situations and make informed judgments, which must consider the impact of engineering solutions in global, economic, environmental, and societal contexts
+5. an ability to function effectively on a team whose members together provide leadership, create a collaborative and inclusive environment, establish goals, plan tasks, and meet objectives
+6. an ability to develop and conduct appropriate experimentation, analyze and interpret data, and use engineering judgment to draw conclusions
+7. an ability to acquire and apply new knowledge as needed, using appropriate learning strategies.
+
+## Class Redesign for IENG 331
+
+### Alignment with Student Outcomes
+
+- Outcome 1: “An ability to identify, formulate, and solve complex engineering problems by applying principles of engineering, science, and mathematics.”
+  - Alignment: Through mastery of Python, SQL, and Excel, students will gain the ability to identify, formulate, and solve complex problems by integrating principles of engineering, mathematics, and data science.
+- Outcome 3: “An ability to communicate effectively with a range of audiences.”
+  - Alignment: Data visualization techniques taught in Python and Excel enhance students’ ability to effectively communicate insights to diverse audiences.
+- Outcome 6: “An ability to develop and conduct appropriate experimentation, analyze and interpret data, and use engineering judgment to draw conclusions.”
+  - Alignment: Experimentation and analysis using these tools directly support students in developing and conducting appropriate experimentation, analyzing data, and drawing engineering-informed conclusions.
+- Outcome 7: “An ability to acquire and apply new knowledge as needed, using appropriate learning strategies.”
+  - Alignment: Exposure to these diverse tools fosters lifelong learning and the ability to acquire new skills as technologies evolve, preparing students for dynamic professional demands.
+
+### Semester-Long Project
+
+I would like to design a project for the students, either individual or in teams of two, where they apply the skills learned in the class. The semester-long project is designed to provide students with practical experience applying skills learned in class to real-world datasets. Students will work individually or in teams of two to analyze the same dataset using different tools, starting with Python, followed by Excel, and optionally Tableau with SQL if time permits. This approach ensures students gain hands-on experience with multiple tools, enabling them to compare workflows and understand their distinct strengths and applications. By working with real-world data, students will enhance their problem-solving abilities and develop a deeper understanding of data analysis concepts. Assigning unique datasets to each team fosters collaboration while minimizing opportunities for plagiarism. Additionally, diverse datasets will make end-of-semester presentations more engaging and highlight the range of analyses conducted. Beyond the technical learning, this project offers professional development opportunities. Students are encouraged to submit their completed work to GitHub as part of a portfolio, show casing their skills to prospective employers. Bonus points will be awarded for well-documented and polished submissions.
+
+Project Objectives:
+
+1. Select and work with a real-world dataset (resources for datasets will be provided).
+2. Perform data cleaning, transformation, and analysis.
+3. Create visualizations to communicate insights, using Python, Excel, and SQL to compare workflows.
+4. Optionally, publish the final project to GitHub as a polished portfolio piece, with bonus points awarded for professional documentation and presentation.
+
+#### Alignment with Student Outcomes
+
+This project is aligned with the ABET-defined Student Outcomes for the Industrial Engineering program, fostering key competencies that are critical for engineering professionals:
+
+- Outcome 1: “An ability to identify, formulate, and solve complex engineering problems by applying principles of engineering, science, and mathematics.”
+  - Alignment: The project requires students to analyze complex datasets, identify meaningful patterns or trends, and formulate data-driven conclusions using structured methodologies across Python, Excel, and SQL workflows. By comparing results across tools, students refine their problem-solving approaches and gain insight into the nuances of different software platforms.
+- Outcome 3: “An ability to communicate effectively with a range of audiences.”
+  - Alignment: End-of-semester presentations provide an opportunity for students to communicate their findings through well-crafted visualizations and narratives. They learn to adapt their communication for technical and non-technical audiences, an essential skill for professional engineers.
+- Outcome 5: “An ability to function effectively on a team whose membership together provides leadership, creates a collaborative and inclusive environment, establishes goals, plans tasks, and meets objectives.”
+  - Alignment: For teams of two, this project fosters collaboration by requiring joint planning, division of tasks, and synthesis of individual contributions. It also emphasizes inclusively by assigning diverse datasets, ensuring each team approaches problems uniquely.
+- Outcome 6: “An ability to develop and conduct appropriate experimentation, analyze and interpret data, and use engineering judgment to draw conclusions.”
+  - Alignment: The project involves data experimentation through cleaning, transformation, and visualization, with an emphasis on interpreting results to derive actionable insights. Students will practice engineering judgment when comparing the utility of different tools and techniques.
+- Outcome 7: “An ability to acquire and apply new knowledge as needed, using appropriate learning strategies.”
+  - Alignment: Exposure to multiple tools (Python, Excel, Tableau, SQL) and encouragement to publish on GitHub requires students to learn new software features, adapt workflows, and apply best practices in project documentation. This iterative learning process mirrors professional environments.
+
+#### Additional Learning and Professional Benefits
+
+- Portfolio Development: Encouraging students to publish their work on GitHub equips them with a tangible showcase of their technical abilities, setting them apart in job applications and interviews.
+- Multi-Tool Proficiency: Familiarity with industry-standard tools prepares students for diverse roles and challenges in engineering and data analysis.
+- Analytical Rigor: By addressing real-world problems, students gain hands-on experience in data wrangling, analysis, and visualization—core skills for engineering and management roles.
+- Effective Communication: Presentations teach students how to translate technical results into compelling stories, a critical skill for engaging stakeholders.
+
+## Datasets for class projects
+
+Use these links to find a dataset you will use for during the class:
+
+## These will be given to students for Test 2
+
+- [Maven Analytics | Data Playground](https://www.mavenanalytics.io/data-playground)
+- [Maven Analytics | Data Challenges](https://mavenanalytics.io/challenges)
+
+## These can be used for the final project
+
+- [UC Irvine Machine Learning Repository](https://archive.ics.uci.edu/)
+- [Kaggle](https://www.kaggle.com/datasets)
+- [Data.gov](https://data.gov/dataset)
+- [WHO Global Health Observatory](https://www.who.int/data/gho)
+- [dolthub](https://www.dolthub.com/discover)

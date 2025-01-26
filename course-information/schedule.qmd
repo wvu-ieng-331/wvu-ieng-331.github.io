@@ -1,0 +1,55 @@
+---
+title: "Schedule"
+format: html
+order: 1
+---
+
+Course weeks with modules follow a consistent cycle:
+
+| Tuesday                                                  | Thursday                                |
+|:--------------------------------------------------------:|:---------------------------------------:|
+| In class review & peer instruction of Learning Module(s) | Hands-on Lab work in class              |
+| In class quiz (for bonus) of Learning Module(s)          | Lab(s) due following Monday at 11:59 PM |
+
+::: {.callout-tip}
+All Learning Modules will be available by the start of the week. It is expected that you review the week's Learning Module(s) before class on the respective Tuesday.
+:::
+
+## Calendar
+
+- Individual Learning Modules are in **bold**.
+- **Labs**: due on Monday at 11:59 PM of the following week.
+  - **Example - Week 7**:
+    - Tuesday (2025-02-25), we will go over the exercises from **Intro to Data Science**.
+    - Thursday (2025-02-27), you will work on **Lab 7** in class.
+    - Monday (2025-03-03), **Lab 7** is due.
+- **Tests**: due on Wednesday at 11:59PM of the test week.
+  - **Example - Test 1**:
+    - Tuesday (2025-02-18): No new lecture material for this week, give time to ask questions for test.
+    - Wednesday (2025-02-19): Test is due at 11:50 PM.
+    - Thursday (2025-02-20): We will go through the test problems in class.
+- **Final Project**: due at 11:59 PM on Monday, April 28th, 2025.
+
+*Schedule subject to change, changes will be announced in class and on eCampus.*
+
+::: {.column-body-outset}
+| Week | Start      | Learning Module(s)                                   | Course Deliverable(s) Due |
+|:----:|:----------:|------------------------------------------------------|---------------------------|
+| 1    | 2025-01-13 | Course Intro                                         |                           |
+| 2    | 2025-01-20 | **Setting Up Your Workstation**                      |                           |
+| 3    | 2025-01-27 | **Intro to Python** & **Flow Control and Functions** | Lab 1                     |
+| 4    | 2025-02-03 | **Iterations** & **Data Structures**                 | Lab 2, Lab 3              |
+| 5    | 2025-02-10 | **Object Oriented Programming**                      | Lab 4, Lab 5              |
+| 6    | 2025-02-17 | Test 1 Prep & Review                                 | Lab 6, Test 1             |
+| 7    | 2025-02-24 | **Intro to Data Science**                            |                           |
+| 8    | 2025-03-03 | **Data Import** & **Data Visualization**             | Lab 7                     |
+| 9    | 2025-03-10 | **Data Transformation**                              | Lab 8, Lab 9              |
+| 10   | 2025-03-17 | Test 2 Prep & Review                                 | Lab 10, Test 2            |
+| 11   | 2025-03-24 | Spring Recess                                        |                           |
+| 12   | 2025-03-31 | **Data Communication**                               |                           |
+| 13   | 2025-04-07 | **SQL for Data Analysis**                            | Lab 11                    |
+| 14   | 2025-04-14 | **Excel for Data Analysis**                          | Lab 12                    |
+| 15   | 2025-04-21 | Open Lab Week, Work on Final Project                 | Lab 13                    |
+| 16   | 2025-04-28 | Presentations                                        | Final Project             |
+| 17   | 2025-05-05 | Finals Week (No Final)                               |                           |
+:::

@@ -1,10 +1,15 @@
 ---
 title: "02 | Intro to Python"
-subtitle: "Learn about the basics of Python as well as how to use marimo."
+subtitle: "Learn about the basics of Python."
 format: html
 order: 2
 ---
 
 ## Overview
 
-WIP
+This learning module will cover the basics of Python needed for this course. It is by no means exhaustive in the capabilites of Python, but it is enough for a beginner with experience in coding before (see: [Prerequisite Course(s)](../index.qmd#course-info)).
+
+This Learning Module has been adapted from [Think Python 3E](https://allendowney.github.io/ThinkPython/index.html) with some updates for industrial engineering topics as well as my own work.
+
+## Programming as a way of thinking
+

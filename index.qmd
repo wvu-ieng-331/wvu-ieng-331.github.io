@@ -12,7 +12,7 @@ format: html
 
 **Class Meets:** Tuesday/Thursday 11:00 AM - 12:15 PM
 
-**Class Location:** Engineering Sciences Building (ESB) G87B
+**Class Location:** Engineering Sciences Building (ESB) | Room G87B
 
 **Instructor:** [Ozan Ozbeker](https://www.linkedin.com/in/ozanozbeker/) (<ozan.ozbeker@mail.wvu.edu>)
 

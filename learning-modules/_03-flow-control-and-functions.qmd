@@ -1,3 +1,10 @@
+---
+title: "03 | Functions and Flow Control"
+subtitle: "Learn about the basics of Python."
+format: html
+order: 3
+---
+
 ## Functions
 
 So far we've used several built in Python functions. Now we will learn how to write our own. We'll also see how one function can call another.

@@ -1,0 +1,12 @@
+{
+  "hash": "72e3f17d3ab3c0e359df4a450851bd5b",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: Functions\n---\n\n\n\nSo far we've used several built in Python functions. Now we will learn how to write our own. We'll also see how one function can call another.\n\n### Defining new functions\n\nA **function definition** specifies the name of a new function and the sequence of statements that run whe the function is called:\n\n\n::: {#4ba7c925 .cell execution_count=1}\n``` {.python .cell-code}\ndef print_lyrics():\n    print(\"Almost heaven, West Virginia\")\n    print(\"Blue ridge mountains, Shenandoah river\")\n```\n:::\n\n\n`def` is a keyword that indicates that this is a function definition. The name of this function is `print_lyrics`. Anything that's a legal variable name is also a legal function name.\n\nThe empty parenthesis indicates that this function doesn't take any arguments.\n\nThe first line of the function definition is called the **header**, the rest is caleld the **body**. The header has to end with a colon and the body has to be indented, usually four spaces.\n\nDefining a function creates a **function object**:\n\n::: {#8107f4c9 .cell execution_count=2}\n``` {.python .cell-code}\nprint_lyrics\n```\n\n::: {.cell-output .cell-output-display execution_count=2}\n```\n<function __main__.print_lyrics()>\n```\n:::\n:::\n\n\nThe output shows that `print_lyrics` is a function that takes no arguments. `__main__` is the name of the module that contains `print_lyrics`. !!! EXPLAIN `__main__` BETTER HERE !!!\n\n",
+    "supporting": [
+      "03-flow-control-and-functions_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

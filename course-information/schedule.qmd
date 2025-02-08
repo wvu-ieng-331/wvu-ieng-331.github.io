@@ -38,7 +38,7 @@ All Learning Modules will be available by the start of the week. It is expected 
 | 1    | 2025-01-13 | Course Intro                          |                           |
 | 2    | 2025-01-20 | **01 \| Setting Up Your Workstation** |                           |
 | 3    | 2025-01-27 | **02 \| Intro to Python**             | Lab 01                    |
-| 4    | 2025-02-03 | **03 \| Flow Control and Functions**  | Lab 2                     |
+| 4    | 2025-02-03 | **03 \| Flow Control and Functions**  | Lab 02                    |
 | 5    | 2025-02-10 | **04 \| Data Structures**             | Lab 03                    |
 | 6    | 2025-02-17 | Test 1 (Modules 01-04) Prep           | Lab 04                    |
 | 7    | 2025-02-24 | **05 \| Intro to Data Science**       | **Test 1**                |

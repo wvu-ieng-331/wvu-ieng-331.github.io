@@ -41,7 +41,7 @@ All Learning Modules will be available by the start of the week. It is expected 
 | 4    | 2025-02-03 | **03 \| Flow Control and Functions**  | Lab 02                  |
 | 5    | 2025-02-10 | **04 \| Data Structures**             | Lab 03                  |
 | 6    | 2025-02-17 | Test 01 (Modules 01-04) Prep          | Lab 04                  |
-| 7    | 2025-02-24 | **05 \| Intro to Data Science**       | **Test 01**             |
+| 7    | 2025-02-24 | **05 \| Intro to Data Analysis**       | **Test 01**             |
 | 8    | 2025-03-03 | **06 \| Data Visualization**          | Lab 05                  |
 | 9    | 2025-03-10 | **07 \| Data Transformation**         | Lab 06                  |
 | 10   | 2025-03-17 | **08 \| Data Communication**          | Lab 07                  |

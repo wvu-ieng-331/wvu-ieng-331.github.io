@@ -1,0 +1,1705 @@
+---
+title: "05 | Introduction to Data Science"
+subtitle: "Python data workflows with Polars and Plotly"
+format:
+  html:
+    fig-height: 2
+    other-links:
+      - text: "Python Polars the Definitive Guide (Early Release)"
+        href: resources/Python_Polars_the_Definitive_Guide_-_Early_Release_6.pdf
+        icon: filetype-pdf
+      - text: billboard.csv
+        href: data/billboard.csv
+        icon: filetype-csv
+      - text: cms_patient_experience.csv
+        href: data/cms_patient_experience.csv
+        icon: filetype-csv
+      - text: penguins.csv
+        href: data/penguins.csv
+        icon: filetype-csv
+      - text: students.csv
+        href: data/students.csv
+        icon: filetype-csv
+      - text: who2.csv
+        href: data/who2.csv
+        icon: filetype-csv
+order: 5
+---
+
+```{python}
+#| echo: false
+#| include: false
+#| warning: false
+
+import plotly.io as pio
+# pio.renderers.default = 'iframe'
+pio.renderers.default = "plotly_mimetype+notebook_connected+iframe"
+
+pio.templates['custom'] = pio.templates['plotly']  # Start with an existing template
+pio.templates['custom'].layout.update(
+    title={'y': 0.98},  # Move title up
+    margin={'t': 65},  # Increase top margin
+)
+
+# Set the custom template as the default
+pio.templates.default = 'custom'
+
+import polars as pl
+pl.Config(tbl_rows=8)
+```
+
+## Overview
+
+In this beginning chapter, we will cover the fundamentals of data analysis in the form of **importing**, **tidying**, **transforming**, and **visualizing data**, as shown below:
+
+![In this learning module, you’ll learn how to import, tidy, transform, and visualize data.](images/whole-game.png)
+
+By the end of this module, you will be able to:
+
+- Import data from various file formats into Python using Polars
+- Clean and reshape datasets to facilitate analysis
+- Transform data through filtering, sorting, and creating new variables
+- Group and aggregate data to identify patterns and trends
+- Visualize distributions and relationships using Plotly Express
+- Apply tidy data principles to structure datasets effectively
+
+### Initialization
+
+At this point, you will need to install a few more Python packages:
+
+```{.bash filename="terminal"}
+uv add polars[all] plotly[express] statsmodels palmerpenguins nycflights13 billboard
+```
+
+Once installed, import the following:
+
+```{python}
+#| label: import-modules
+
+import plotly.express as px
+import polars as pl
+import palmerpenguins
+```
+
+## Data visualization
+
+Python has several systems for making graphs, but we will be focusing on [Plotly](https://plotly.com/python/), specifically [Plotly Express](https://plotly.com/python/plotly-express/). Plotly Express contains functions that can create entire plots at once, and makes it easy to create most common figures.
+
+This section will teach you how to visualize your data using **Plotly Express**, walking through visualizing distributions of single variables, as well as relationships between two or more variables.
+
+### The `penguins` data frame
+
+The dataset we will be working with is a commonly used one, affectionately referred to as the Palmer Penguins, which includes body measurements for penguins on three islands in the Palmer Archipelago. A **data frame** is a rectangular collection of variables (in the columns) and observations (in the rows). `penguins` contains 344 observations collected and made available by Dr. Kristen Gorman and the Palmer Station, Antarctica.
+
+Let's define some term:
+
+- A **variable** is a quantity, quality, or property that you can measure.
+- A **value** is the state of a variable when you measure it. The value of a variable may change from measurement to measurement.
+- An **observation** is a set of measurements made under similar conditions (you usually make all of the measurements in an observation at the same time and on the same object). An observation will contain several values, each associated with a different variable. We'll sometimes refer to an observation as a data point.
+- **Tabular data** is a set of values, each associated with a variable and an observation. Tabular data is *tidy* if each value is placed in its own "cell", each variable in its own column, and each observation in its own row.
+
+In this context, a variable refers to an attribute of all the penguins, and an observation refers to all the attributes of a single penguin.
+
+We will use `palmerpenguins` package to get the `penguins` data, and convert it to a `polars` data frame:
+
+```{python}
+penguins = pl.from_pandas(palmerpenguins.load_penguins())
+```
+
+The reason we convert to a Polars data frame is because we want to use the tools and methods that come with Polars:
+
+```{python}
+type(penguins)
+```
+
+Depending on what tool/IDE you're using Python with, just having the variable name (`penguins`) as the last line will print a formatted view of the data. If not, you can also use `print()` to use Polars' native formatting:
+
+```{python}
+penguins
+```
+
+```{python}
+print(penguins)
+```
+
+This data frame contains 8 columns. For an alternative view, use `DataFrame.glimpse()`, which is helpful for wide tables that have many columns:
+
+```{python}
+penguins.glimpse()
+```
+
+Among these variables are:
+
+1. `species`: a penguin's species (Adelie, Chinstrap, or Gentoo).
+2. `flipper_length_mm`: length of a penguin's flipper, in millimeters.
+3. `body_mass_g`: body mass of a penguin, in grams.
+
+### First visualization
+
+Our goal is to recreate the following visual that displays the relationship between flipper lengths and body masses of these penguins, taking into consideration the species of the penguin.
+
+```{python}
+#| label: final-goal-plot
+#| echo: false
+
+px.scatter(
+    penguins,
+    x="flipper_length_mm",
+    y="body_mass_g",
+    color="species",
+    symbol="species",
+    trendline="ols",
+    trendline_scope="overall",
+    title="Body mass and flipper length",
+    subtitle="Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    labels={
+        "species":"Species",
+        "body_mass_g":"Body mass (g)",
+        "flipper_length_mm":"Flipper length (mm)"
+    }
+)
+```
+
+### Using Plotly Express
+
+With Plotly Express, you begin a plot by calling a plotting function from the module, commonly referred to as `px`. You can then add arguments to your plot function for more customization.
+
+At it's most basic form, the plotting function creates a *blank canvas* with a grid since we've given it no data.
+
+```{python}
+px.scatter()
+```
+
+Next, we need to actually provide data, along with the appropriate number of variables depending on the type of plot we are trying to create.
+
+```{python}
+px.scatter(data_frame=penguins, x="flipper_length_mm", y="body_mass_g")
+```
+
+`px.scatter()` creates a [scatter plot](https://plotly.com/python/line-and-scatter/), and we will learn many more plot types through out the course. You can learn more about the different plots Plotly Express offers at their [gallery](https://plotly.com/python/plotly-express/#gallery).
+
+This doesn't match our "final goal" *yet*, but using this plot we can start answering the question that motivated our exploration: "What does the relationship between flipper length and body mass look like?" The relationship appears to be positive (as flipper length increases, so does body mass), fairly linear (the points are clustered around a line instead of a curve), and moderately strong (there isn’t too much scatter around such a line). Penguins with longer flippers are generally larger in terms of their body mass.
+
+Before we go further, I want to point out that this dataset has some missing values for `flipper_length_mm` and `body_mass_g`, but Plotly does not warn you about this when creating the plot. If one and/or other variable is missing data, we cannot plot that.
+
+### Adding aesthetics and layers
+
+Scatter plots are useful for displaying the relationship between two numerical variables, but it’s always a good idea to be skeptical of any apparent relationship between two variables and ask if there may be other variables that explain or change the nature of this apparent relationship. For example, does the relationship between flipper length and body mass differ by species? Let’s incorporate species into our plot and see if this reveals any additional insights into the apparent relationship between these variables. We will do this by representing species with different colored points.
+
+To achieve this, we will use some of the other arguments that `px.scatter()` provides for us, like `color`:
+
+```{python}
+px.scatter(
+    data_frame=penguins, 
+    x="flipper_length_mm", 
+    y="body_mass_g", 
+    color="species"
+)
+```
+
+When a categorical variable is mapped to an aesthetic, Plotly will automatically assign a unique value of the aesthetic (here, a unique color) to each unique level of the variable (each of the three species), a process known as **scaling**. Plotly will also add a legend that explains which value correspond to which levels.
+
+Now let's add another layer, a trendline displaying the relationship between body mass and flipper length. `px.scatter()` has an argument for this, `trendline`, and a couple other arguments that modify its behavior. Specifically, we want to draw a line of best fit using Ordinary Least Squares (ols). You can see the other options, and more info about this plotting function with `?px.scatter()` or in the online documentation.
+
+```{python}
+px.scatter(
+    data_frame=penguins, 
+    x="flipper_length_mm", 
+    y="body_mass_g", 
+    color="species",
+    trendline="ols"
+)
+```
+
+We've added lines, but this plot doesn't look like our final goal, which only has one line for the entire dataset, opposed to separate lines for each of the penguin species. `px.scatter()` has an argument, `trendline_scope`, which controls how the trendline is drawn when there are groups, in this case created when we used `color="species"`. The default for `trendline_scope` is `"trace"`, which draws a line per color, symbol, facet, etc., and `"overall"`, which computes one trendline for the entire dataset,a nd replicates across all facets.
+
+```{python}
+px.scatter(
+    data_frame=penguins, 
+    x="flipper_length_mm", 
+    y="body_mass_g", 
+    color="species",
+    trendline="ols",
+    trendline_scope="overall"
+)
+```
+
+Now we have something that is very close to our final plot, thought it's not there yet. We still need to use different shapes for each species and improve the labels.
+
+It's generally not a good idea to represent information only using colors on a plot as people perceive colors differently do to color blindness or other color vision difference. `px.scatter()` allows us to control the shapes of the dots using the `symbol` argument.
+
+```{python}
+px.scatter(
+    penguins,
+    x="flipper_length_mm",
+    y="body_mass_g",
+    color="species",
+    symbol="species",
+    trendline="ols",
+    trendline_scope="overall",
+)
+```
+
+Note that the legend is automatically updated to reflect the different shapes of the points as well.
+
+Finally, we can use `title`, `subtitle`, and `labels` arguments to update our labels. `title` and `subtitle` just take a string, adding labels are bit more advanced. `labels` takes a dictionary with key:value combos for each of the labels on the plot that you would like to change. In our plot, we want to update the labels for the x-axis, y-axis, and the legend, but we refer to them by their current label, not their position:
+
+```{python}
+px.scatter(
+    penguins,
+    x="flipper_length_mm",
+    y="body_mass_g",
+    color="species",
+    symbol="species",
+    trendline="ols",
+    trendline_scope="overall",
+    title="Body mass and flipper length",
+    subtitle="Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    labels={
+        "species":"Species",
+        "body_mass_g":"Body mass (g)",
+        "flipper_length_mm":"Flipper length (mm)"
+    }
+)
+```
+
+Now we have our final plot. If you haven't noticed already, Plotly creates *interactive* plots, you can hover over certain data points to see their values, use the legend as a filter, and so on. In the top right of every plot, you will see a menu with some options.
+
+### Visualizing distributions
+
+How you visualize the distribution of a variable depends on the type of the variable: categorical or numerical.
+
+#### A categorical variable
+
+A value is **categorical** if it can only take one of a small set of values. To examine the distribution of a categorical variable, you can use a [bar chart](https://plotly.com/python/bar-charts/). The height of the bars displays how many observations occurred with each `x` value.
+
+```{python}
+px.bar(penguins, x="species")
+```
+
+`px.bar()` will result in **one rectangle drawn per row of input**, which can result in the striped look above. To combine these rectangles into on color per position, we can pre-calculate the **count** as and use it as the **y** value:
+
+```{python}
+# we'll learn more about this Polars code later
+penguins_count = penguins.group_by("species").len("count")
+print(penguins_count)
+
+px.bar(penguins_count, x="species", y="count")
+```
+
+The order of categorical values in axes, legends, and facets depends on the order in which these values are first encountered in `data_frame`. It's often preferable to re-order the bars based on their frequency, which we can do with the `category_orders` argument. `category_orders` takes a dictionary where the keys correspond to column names, and the values should be lists of strings corresponding to the specific display order desired
+
+```{python}
+px.bar(
+    penguins_count,
+    x="species", 
+    y="count",
+    category_orders={"species": ["Adelie", "Gentoo", "Chinstrap"]}
+)
+```
+
+While it's easy enough to manually sort three columns, this could become very tedious for more columns. Here is one programmatic way you could sort the columns:
+
+```{python}
+penguins_sorted = (
+    penguins_count
+    .sort(by="count", descending=True)
+    .get_column("species")
+)
+
+print(penguins_sorted)
+
+px.bar(
+    penguins_count,
+    x="species", 
+    y="count",
+    category_orders={"species": penguins_sorted}
+)
+```
+
+We will dive into the data manipulation code later, this is just to show what's possible.
+
+#### A numerical variable
+
+A variable is **numerical** (or quantitative) if it can take on a wide range of numerical values, and it is sensible to add, subtract, or take averages with those values. Numerical variables can be continuous or discrete.
+
+One common visualization for distributions of continuous variables is a [histogram](https://plotly.com/python/histograms/).
+
+```{python}
+px.histogram(penguins, x="body_mass_g")
+```
+
+A histogram divides the x-axis into equally spaced bins and then uses the heigh of the bar to display the number observations that fall in each bin. In the graph above, the tallest bar shows that 39 observations have a `body_mass_g` value between 3,500 and 3,700 grams, which are the left and right edges of the bar.
+
+When working with histograms, it's a good idea to use different number of bins to reveal different patterns in the data. In the plots below, X bars is too many, resulting in narrow bars. Similarly, 3 bins is too few, resulting in all the data being binned into huge categories that make it difficult to determine the shape of the distribution. A bin number of 20 provides a sensible balance.
+
+::: {layout="[[1,1], [1]]"}
+```{python}
+px.histogram(penguins, x="body_mass_g", nbins=200)
+```
+
+```{python}
+px.histogram(penguins, x="body_mass_g", nbins=3)
+```
+
+```{python}
+px.histogram(penguins, x="body_mass_g", nbins=20)
+```
+:::
+
+An alternative visualization for distributions of numerical variables is a [density plot](https://www.data-to-viz.com/graph/density.html). A density plot is a smoothed-out version of a histogram and a practical alternative, particularly for continuous data that comes from an underlying smooth distribution. At the time of writing, Plotly Express doesn't have a quick way to create a density plot, but it does offer very customizable [violin plots](https://plotly.com/python/violin/), which we can make to look like a density plot if we would like.
+
+```{python}
+px.violin(penguins, x="body_mass_g")
+```
+
+The density plot is similar to the violin plot, with only one side, and the peaks are more exaggerated:
+
+```{python}
+px.violin(
+    penguins, 
+    x="body_mass_g", # plots the variable across the x-axis
+    range_y=[
+        0,   # limits the bottom of y-axis, removing reflection
+        0.25 # limits the top of y-axis, stretching the peaks
+    ]
+)
+```
+
+
+While this workaround works, sticking to the original violin plot I think looks better, and we can add some extra arguments to see more details:
+
+```{python}
+px.violin(penguins, x="body_mass_g", points="all")
+```
+
+Play around with different arguments and see what you like best!
+
+As an analogy to understand these plots vs a histogram, imagine a histogram made out of wooden blocks. Then, imagine that you drop a cooked spaghetti string over it. The shape the spaghetti will take draped over blocks can be thought of as the shape of the density curve. It shows fewer details than a histogram but can make it easier to quickly glean the shape of the distribution, particularly with respect to modes and skewness.
+
+### Visualizing relationships
+
+To visualize a relationship we need to have at least two variables mapped to aesthetics of a plot. In the following sections you will learn about commonly used plots for visualizing relationships between two or more variables and the plots used for creating them.
+
+#### A numerical and a categorical variable
+
+To visualize the relationship between a numerical and a categorical variable we can use side-by-side box plots. A [boxplot](https://plotly.com/python/box-plots/) is a type of visual shorthand for measures of position (percentiles) that describe a distribution. It is also useful for identifying potential outliers. Each boxplot consists of:
+
+- A box that indicates the range of the middle half of the data, a distance known as the inter-quartile range (IQR), stretching from the 25th percentile of the distribution to the 75th percentile. In the middle of the box is a line that displays the median, i.e. 50th percentile, of the distribution. These three lines give you a sense of the spread of the distribution and whether or not the distribution is symmetric about the median or skewed to one side.
+
+- Visual points that display observations that fall more than 1.5 times the IQR from either edge of the box. These outlying points are unusual so are plotted individually.
+
+- A line (or whisker) that extends from each end of the box and goes to the farthest non-outlier point in the distribution.
+
+!["Diagram depicting how a boxplot is created."](images/EDA-boxplot.png)
+
+Let’s take a look at the distribution of body mass by species using `px.box()`
+
+```{python}
+px.box(penguins, x="species", y="body_mass_g")
+```
+
+Alternatively, we can make violin plots with multiple groups:
+
+```{python}
+px.violin(penguins, x="body_mass_g", color="species", box=True)
+```
+
+As we've seen before, there are many ways to see and code what we are looking for.
+
+#### Two categorical variables
+
+We can use stacked bar plots to visualize the relationship between two categorical variables. For example, the following two stacked bar plots both display the relationship between `island` and `species`, or specifically, visualizing the distribution of `species` within each island.
+
+The first plot shows the frequencies of each species of penguins on each island. The plot of frequencies shows that there are equal numbers of Adelies on each island. But we don’t have a good sense of the percentage balance within each island.
+
+```{python}
+px.bar(penguins, x="island", color="species")
+```
+
+or
+
+```{python}
+data = penguins.group_by(["island", "species"]).len("count")
+data_order = data.group_by("island").agg(pl.col("count").sum()).sort(by="count", descending=True).get_column("island")
+
+
+px.bar(
+    data, x="island", y="count", color="species",
+    category_orders = {"island": data_order, "species": data_order}
+)
+```
+
+#### Two numerical variables
+
+So far we've seen scatter plots for visualizing the relationship between two numerical variables. A scatter plot is probably the most commonly used plot for visualizing the relationship between to numerical variables.
+
+```{python}
+px.scatter(penguins, x="flipper_length_mm", y="body_mass_g")
+```
+
+#### Three or more variables
+
+As we saw before, we can incorporate more variables into a plot by mapping them to additional aesthetics. For example, in the following plot, the colors of points represent species and the shapes represent islands.
+
+```{python}
+px.scatter(
+    penguins, 
+    x="flipper_length_mm", y="body_mass_g",
+    color="species", symbol="island"
+)
+```
+
+However adding too many aesthetic mappings to a plot makes it cluttered and difficult to make sense of. Another way, which is particularly useful for categorical variables, is to split your plot into **facets**, subplots that each display one subset of the data.
+
+Most Plotly Express functions provide arguments to facet, just make sure to check the documentation.
+
+```{python}
+px.scatter(
+    penguins, 
+    x="flipper_length_mm", y="body_mass_g",
+    color="species", symbol="island",
+    facet_col="island"
+)
+```
+
+### Summary
+
+In this section, you’ve learned the basics of data visualization with Plotly Express. We started with the basic idea that underpins Plotly Express: a visualization is a mapping from variables in your data to aesthetic properties like position, color, size and shape. You then learned about increasing the complexity with more arguments in the Plotly functions. You also learned about commonly used plots for visualizing the distribution of a single variable as well as for visualizing relationships between two or more variables, by leveraging additional aesthetic mappings and/or splitting your plot into small multiples using faceting.
+
+## Data transformation
+
+Visualization is an important tool for generating insight, but it’s rare that you get the data in exactly the right form you need to make the graph you want. Often you’ll need to create some new variables or summaries to answer your questions with your data, or maybe you just want to rename the variables or reorder the observations to make the data a little easier to work with. We've already seen examples of this above when creating the bar charts. In this section, we'll see how to do that with the [Polars](https://docs.pola.rs/) package.
+
+The goal of this section is to give you an overview of all the key tools for transforming a data frame. We’ll start with functions that operate on rows and then columns of a data frame, then circle back to talk more about method chaining, an important tool that you use to combine functions. We will then introduce the ability to work with groups. We will end the section with a case study that showcases these functions in action.
+
+### The `flights` data frame
+
+To explore basic Polars methods and expressions, we will use the `flights` data frame from the `nycflights13` package. This dataset contains all 336,776 flights that departed from New York City in 2013.
+
+```{python}
+import nycflights13
+import polars as pl
+
+flights = (
+    pl
+    .from_pandas(nycflights13.flights)
+    .with_columns(pl.col("time_hour").str.to_datetime("%FT%TZ"))
+) # We will learn what's going on here in later this section
+
+flights
+```
+
+`flights` is a Polars [`DataFrame`](https://docs.pola.rs/api/python/stable/reference/dataframe/index.html). Different packages have their own version of a data frame with their own methods, functions, etc., but in this course, we will be using Polars. Polars provides its own way of working with data frames, as well as importing, exporting, printing, and much more, including the previously shown `DataFrame.glimpse()` method:
+
+```{python}
+flights.glimpse()
+```
+
+In both views, the variable names are followed by abbreviations that tell you the type of each variable: `i64` is short for integer, `f64` is short for float, `str` is short for string, and `datetime[μs]` for date-time (in this case, down to the micro-seconds).
+
+We're going to learn the primary methods (or contexts as Polars calls them) which will allow yo uto solve the vast majority of your data manipulation challenges. Before we discuss their individual differences, it's worth stating what they have in common:
+
+1. The methods are always attached (or chained) to a data frame.
+2. The arguments typically describe which columns to operate on.
+3. The output is a new data frame (for the most part, ex: `group_by`).
+
+Because each method does one thing well, solving complex problems will usually require combining multiple methods, and we will do so with something called "method chaining". You've already seen this before, this is when we attach multiple methods together without creating a placeholder variable between steps. You can think of each `.` operator of saying "then". This should help you get a sense of the following code without understanding the details:
+
+```{python}
+flights.filter(
+    pl.col("dest") == "IAH"
+).group_by(
+    ["year", "month", "day"]
+).agg( # "aggregate", or summarize
+    arr_delay=pl.col("arr_delay").mean()
+)
+```
+
+We can also write the previous code in a cleaner format. When surrounded by parenthesis, the `.` operator does not have to "touch" the closing method before it:
+
+```{.python}
+(
+    flights
+    .filter(pl.col("dest") == "IAH")
+    .group_by(["year", "month", "day"])
+    .agg(arr_delay=pl.col("arr_delay").mean())
+)
+```
+
+If we didn't use method chaining, we would have to create a bunch of intermediate objects:
+
+```{python}
+flights1 = flights.filter(pl.col("dest") == "IAH")
+flights2 = flights1.group_by(["year", "month", "day"])
+flights3 = flights2.agg(arr_delay=pl.col("arr_delay").mean())
+```
+
+While all of these have their time and place, method chaining generally produces data analysis code that is easier to write and read.
+
+We can organize these contexts (methods) based on what they operate on: **rows**, **columns**, **groups**, or **tables**.
+
+### Rows
+
+The most important contexts that operate on rows of a dataset are `DataFrame.filter()`, which changes which rows are present without changing their order, and `DataFrame.sort()`, which changes the order of the rows without changing which are present. Both methods only affect the rows, and the columns are left unchanged. We'll also see `DataFrame.unique()` which returns rows with unique values. Unlike `DataFrame.sort()` and `DataFrame.filter()`, it can also optionally modify the columns.
+
+#### `DataFrame.filter()`
+
+[`DataFrame.filter()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.filter.html) allows you to keep rows based on the values of the columns. The arguments (also known as predicates) are the conditions that must be true to keep the row. For example, we could find all flights that departed more than 120 minutes late:
+
+```{python}
+flights.filter(pl.col("dep_delay") > 120)
+```
+
+We can use all of the same boolean expressions we've learned previous, as well as chain them with `&` (instead of `and`), `|` (instead of `or`), and `~` (instead of `not`). Note that Polars is picky about ambiguity, so each condition we check for also has it's own parenthesis, similar to what we might use in a calculator to make sure the order of operations is being followed exactly as we want:
+
+```{python}
+# Flights that departed on January 1
+flights.filter(
+    (pl.col("month") == 1) & (pl.col("day") == 1)
+)
+```
+
+```{python}
+# Flights that departed in January or February
+flights.filter(
+    (pl.col("month") == 1) | (pl.col("month") == 2)
+)
+```
+
+There's a useful shortcut when you're combining `|` and `==`: `Expr.is_in()`. It keeps rows where the variable equals one of the values on the right:
+
+```{python}
+# A shorter way to select flights that departed in January or February
+flights.filter(
+    pl.col("month").is_in([1, 2])
+)
+```
+
+When you run `DataFrame.filter()`, Polars executes the filtering operation, creating a new DataFrame, and then prints it. It doesn't modify the existing `flights` dataset because Polars never modifies the input (unless when explicitly chosen). To save the result, you need to use the assignment operator, `=`:
+
+```{python}
+jan1 = flights.filter((pl.col("month") == 1) & (pl.col("day") == 1))
+jan1
+```
+
+#### `DataFrame.sort()`
+
+[`DataFrame.sort()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.sort.html) changes the order of the rows based on the value of the columns. It takes a data frame and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of the preceding columns. For example, the following code sorts by the departure time, which is spread over four columns. We get the earliest years first, then within a year, the earliest months, etc.
+
+```{python}
+flights.sort(by=["year", "month", "day", "dep_time"])
+```
+
+You can use positional arguments to sort by multiple columns in the same way:
+
+```{python}
+flights.sort(
+    by=["year", "month", "day", "dep_time"],
+    descending=[False, False, False, True]
+)
+```
+
+Note that the number of rows has not changed, we’re only arranging the data, we’re not filtering it.
+
+#### `DataFrame.unique()`
+
+[`DataFrame.unique()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.unique.html) finds all the unique rows in a dataset, so technically, it primarily operates on the rows. Most of the time, however, you’ll want the distinct combination of some variables, so you can also optionally supply column names:
+
+```{python}
+# Remove duplicate rows, if any
+flights.unique()
+```
+
+```{python}
+# Find all unique origin and destination pairs
+flights.unique(subset=["origin", "dest"])
+```
+
+It should be noted that the default argument for `keep` is `any`, which **does not give any guarantee of which unique rows are kept**. If you dataset is ordered, you might want to use one of the other options for `keep`.
+
+If you want the number of occurrences instead, you'll need to use a combination of `DataFrame.group_by` along with a `GroupBy.agg()`.
+
+### Columns
+
+There are two important contexts that affect the columns without changing the rows: `DataFrame.with_columns()`, which creates new columns that are derived from the existing columns, & `select()`, which changes which columns are present.
+
+#### `DataFrame.with_columns()`
+
+The job of [`DataFrame.with_columns()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.with_columns.html) is to add new columns. In the Data Wrangling module, you will learn a large set of functions that you can use to manipulate different types of variables. For new, we'll stick with basic algebra, which allows us to compute the `gain`, how much time a delayed flight made up in the air, and the `speed` in miles per hour:
+
+```{python}
+flights.with_columns(
+    gain = pl.col("dep_delay") - pl.col("arr_delay"),
+    speed = pl.col("distance") / pl.col("air_time") * 60
+)
+```
+
+Note that since we haven't assigned the result of the above computation back to `flights`, the new variables `gain` and `speed` will only be printed but will not be stored in a data frame. And if we want them to be available in a data frame for future use, we should think carefully about whether we want the result to be assigned back to `flights`, overwriting the original data frame with many more variables, or to a new object. Often, the right answer is a new object that is named informatively to indicate its contents, e.g., `delay_gain`, but you might also have good reasons for overwriting `flights`.
+
+#### `DataFrame.select()`
+
+It’s not uncommon to get datasets with hundreds or even thousands of variables. In this situation, the first challenge is often just focusing on the variables you’re interested in. [`DataFrame.select()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.select.html) allows you to rapidly zoom in on a useful subset using operations based on the names of the variables:
+
+- Select columns by name:
+
+```{python}
+flights.select("year")
+```
+
+- Select multiple columns by passing a list of column names:
+
+```{python}
+flights.select(["year", "month", "day"])
+```
+
+- Multiple columns can also be selected using positional arguments instead of a list. Expressions are also accepted:
+
+```{python}
+flights.select(
+    pl.col("year"),
+    pl.col("month"),
+    month_add_one = pl.col("month") + 1 # Adds 1 to the values of "month"
+)
+```
+
+Polars also provides more advanced way to select columns using its [Selectors](https://docs.pola.rs/api/python/stable/reference/selectors.html). Selectors allow for more intuitive selection of columns from DataFrame objects based on their name, type, or other properties. They unify and build on the related functionality that is available through the `pl.col()` expression and can also broadcast expressions over the selected columns.
+
+Selectors are available as functions imported from `polars.selectors`. Typical/recommended usage is to import the module as `cs` and employ selectors from there.
+
+```{python}
+import polars.selectors as cs
+import polars as pl
+```
+
+There are a number of selectors you can use within select:
+
+- `cs.starts_with("abc")`: matches column names that begin with "abc".
+- `cs.ends_with("xyz")`: matches column names that end with "xyz".
+- `cs.contains("ijk")`: matches column names that contain "ijk".
+- `cs.matches(r"\d{3}")`: matches column names using regex, columns with three digits repeating in the name in this case.
+- `cs.temporal()`: matches columns with temporal (time) data types.
+- `cs.string()`: matches columns with string data types.
+
+These are just a few, you can see all the selectors with examples in the documentation, or by looking at the options after typing `cs.` in your editor.
+
+You can combine selectors with the following `set` operations:
+
+| Operation            | Expression |
+|----------------------|------------|
+| UNION                | A \| B     |
+| INTERSECTION         | A & B      |
+| DIFFERENCE           | A - B      |
+| SYMMETRIC DIFFERENCE | A ^ B      |
+| COMPLEMENT           | ~A         |
+
+```{python}
+flights.select(cs.temporal() | cs.string())
+```
+
+Note that both individual selector results and selector set operations will always return matching columns in the same order as the underlying DataFrame schema.
+
+### Groups
+
+So far, we've learned about contexts (DataFrame methods) that work with rows and columns. `Polars` gets even more powerful when you add in the ability to work with groups. In this section, we'll focus on the most important contexts: `DataFrame.group_by()`, `DataFrame.agg()`, and the various *slice*-ing contexts.
+
+#### `DataFrame.group_by()`
+
+Use [`DataFrame.group_by()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.group_by.html) to divide your dataset into groups meaningful for your analysis:
+
+```{python}
+flights.group_by("month")
+```
+
+As you can see, `DataFrame.group_by()` doesn't change the data, but returns a [`GroupBy`](https://docs.pola.rs/api/python/stable/reference/dataframe/group_by.html) object. This acts like a `DataFrame`, but subsequent operations will now work "by month", and comes with some extra methods.
+
+#### `GroupBy.agg()`
+
+The most important grouped operation is an aggregation, which, if being used to calculate a single summary statistic, reduces the data frame to have a single row for each group. In Polars, this operation is performed by [`GroupBy.agg()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.dataframe.group_by.GroupBy.agg.html), as shown by the following example, which computes the average departure delay by month:
+
+```{python}
+(
+    flights
+    .group_by("month")
+    .agg(avg_delay = pl.col("dep_delay").mean())
+)
+```
+
+There are two things to note:
+
+1. Polars automatically drops the missing values in `dep_delay` when calculating the mean.
+2. Polars has a few different methods called `mean()`, but they do different things depending on root object (`DataFrame`, `GroupBy`, `Expr`, etc.)
+
+You can create any number of aggregations in a single call to `GroupBy.agg()`. You'll learn various useful summaries in later modules, but one very useful summary is `pl.len()`, which returns the number of rows in each group:
+
+```{python}
+(
+    flights
+    .group_by("month")
+    .agg(
+        avg_delay = pl.col("dep_delay").mean(),
+        n = pl.len()
+    )
+    .sort("month")
+)
+```
+
+Means and counts can get you a surprisingly long way in data science!
+
+#### Slicing functions
+
+There are a few ways Polars provides for you to extract specific rows within each group:
+
+- `GroupBy.head(n = 1)` takes the first row from each group. (Also works with `DataFrame`)
+- `GroupBy.tail(n = 1)` takes the last row from each group. (Also works with `DataFrame`)
+
+`GroupBy` also provides some powerful aggregations for whole groups, like:
+
+```{python}
+flights.group_by("dest").max() # shows max value for each group and column
+flights.group_by("dest").min() # shows min value for each group and column
+```
+
+If you want the top/bottom `k` number of rows (optionally by group), use the `DataFrame.top_k` or `DataFrame.bottom_k` contexts:
+
+```{python}
+flights.top_k(k = 4, by = "arr_delay")
+flights.bottom_k(k = 4, by = "arr_delay")
+```
+
+#### Grouping by multiple variables
+
+You can create groups using more than one variable. For example, we could make a group for each date:
+
+```{python}
+daily = (
+    flights
+    .group_by(["year", "month", "day"])
+)
+
+daily.max()
+```
+
+`GroupBy` methods return a `DataFrame`, so there is no need to explicitly "un-group" your dataset.
+
+### Summary
+
+In this chapter, you’ve learned the tools that Polars provides for working with data frames. The tools are roughly grouped into three categories: those that manipulate the rows (like `DataFrame.filter()` and `DataFrame.sort()`) those that manipulate the columns (like `DataFrame.select()` and `DataFrame.with_columns()`) and those that manipulate groups (like `DataFrame.group_by()` and `GroupBy.agg()`). In this chapter, we’ve focused on these “whole data frame” tools, but you haven’t yet learned much about what you can do with the individual variable. We’ll return to that in a later module in the course, where each section provides tools for a specific type of variable.
+
+## Data tidying
+
+In this section, you will learn a consistent way to organize your data in Python using a system called **tidy data**. Getting your data into this format requires some work up front, but that work pays off in the long term. Once you have tidy data, you will spend much less time munging data from one representation to another, allowing you to spend more time on the data questions you care about.
+
+You'll first learn the definition of tidy data and see it applied to a simple toy dataset. Then we’ll dive into the primary tool you’ll use for tidying data: pivoting. Pivoting allows you to change the form of your data without changing any of the values.
+
+```{python}
+import polars as pl
+import polars.selectors as cs
+import plotly.express as px
+```
+
+### Tidy data
+
+You can represent the same underlying data in multiple ways. The example below shows the same data organized in three different ways. Each dataset shows the same values of four variables: `country`, `year`, `population`, and number of documented `cases` of TB (tuberculosis), but each dataset organizes the values in a different way.
+
+```{python}
+#| echo: false
+
+table1 = pl.from_dict({
+    "country": ["Afghanistan", "Afghanistan", "Brazil", "Brazil", "China", "China"],
+    "year": [1999, 2000, 1999, 2000, 1999, 2000],
+    "cases": [745, 2666, 37737, 80488, 212258, 213766],
+    "population": [19987071, 20595360, 172006362, 174504898, 1272915272, 1280428583]
+})
+
+table2 = pl.from_dict({
+    "country": [
+        "Afghanistan", "Afghanistan", "Afghanistan", "Afghanistan",
+        "Brazil", "Brazil", "Brazil", "Brazil",
+        "China", "China", "China", "China"
+    ],
+    "year": [
+        1999, 1999, 2000, 2000,
+        1999, 1999, 2000, 2000,
+        1999, 1999, 2000, 2000
+    ],
+    "type": [
+        "cases", "population", "cases", "population",
+        "cases", "population", "cases", "population",
+        "cases", "population", "cases", "population"
+    ],
+    "count": [
+        745, 19987071, 2666, 20595360,
+        37737, 172006362, 80488, 174504898,
+        212258, 1272915272, 213766, 1280428583
+    ]
+})
+
+table3 = pl.from_dict({
+    "country": ["Afghanistan", "Afghanistan", "Brazil", "Brazil", "China", "China"],
+    "year": [1999, 2000, 1999, 2000, 1999, 2000],
+    "rate": [
+        "745/19987071",
+        "2666/20595360",
+        "37737/172006362",
+        "80488/174504898",
+        "212258/1272915272",
+        "213766/1280428583"
+    ]
+})
+```
+
+```{python}
+table1
+```
+
+```{python}
+table2
+```
+
+```{python}
+table3
+```
+
+These are all representations of the same underlying data, but they are not equally easy to use. One of them, `table1`, will be much easier to work with Polars & Plotly because it’s **tidy**.
+
+There are three interrelated rules that make a dataset tidy:
+
+1. Each variable is a column; each column is a variable.
+2. Each observation is a row; each row is an observation.
+3. Each value is a cell; each cell is a single value.
+
+![The following three rules make a dataset tidy: variables are columns, observations are rows, and values are cells.](images/tidy-1.png)
+
+Why ensure that your data is tidy? There are two main advantages:
+
+1. There’s a general advantage to picking one consistent way of storing data. If you have a consistent data structure, it’s easier to learn the tools that work with it because they have an underlying uniformity.
+
+2. There’s a specific advantage to placing variables in columns because it allows Polar's vectorized nature to shine. Plotly also works by default with tidy data formats, and requires (a little) workaround for wide formats.
+
+Here are some examples of how Polars & Plotly work with tidy data:
+
+```{python}
+# Compute rate per 10,000
+table1.with_columns(
+    rate = pl.col("cases") / pl.col("population") * 1000
+)
+```
+
+```{python}
+# Compute total cases per year
+table1.group_by("year").agg(total_cases = pl.col("cases").sum())
+```
+
+```{python}
+# Visualize changes over time
+
+table1_datefix = table1.with_columns(
+    date = (pl.col("year").cast(pl.String) + "-01-01").str.to_date()
+)
+
+px.line(
+    table1_datefix,
+    x="date",
+    y="cases",
+    color="country",
+    symbol="country",
+    title="Cases by Year and Country",
+)
+```
+
+::: {.callout-tip}
+While we are covering the basics of tidy data, I highly recommend reading [Tidy Data](https://vita.had.co.nz/papers/tidy-data.pdf) by Hadley Wickham. It's a short paper on the principles of working with tidy data and it's benefits.
+:::
+
+### Lengthening data
+
+The principles of tidy data might seem so obvious that you wonder if you’ll ever encounter a dataset that isn’t tidy. Unfortunately, however, most real data is untidy. There are two main reasons:
+
+1. Data is often organized to facilitate some goal other than analysis. For example, it’s common for data to be structured to make data entry, not analysis, easy.
+
+2. Most people aren’t familiar with the principles of tidy data, and it’s hard to derive them yourself unless you spend a lot of time working with data.
+
+This means that most real analyses will require at least a little tidying. You’ll begin by figuring out what the underlying variables and observations are. Sometimes this is easy; other times you’ll need to consult with the people who originally generated the data. Next, you’ll **pivot** your data into a tidy form, with variables in the columns and observations in the rows.
+
+Polars provides two methods for pivoting data: `DataFrame.pivot()` and `DataFrame.unpivot()`. We'll first start with `DataFrame.unpivot()` because it's the most common case. Let's dive into some examples.
+
+#### Data in column names
+
+The `billboard` dataset records the billboard rank of songs in the year 2000:
+
+```{python}
+#| echo: false
+billboard = pl.read_csv(
+    "data/billboard.csv",
+    try_parse_dates=True
+)
+```
+
+```{python}
+billboard
+```
+
+In this dataset, each observation is a song. The first three columns (`artist`, `track`, and `date.entered`) are variables that describe the song. Then we have 76 columns, `wk1`-`wk76`, that describe the rank of the song in each week. Here, the column names are one variable (the `week`) and the cell values are another (the `rank`).
+
+To tidy this data, we'll use `DataFrame.unpivot()`:
+
+```{python}
+billboard.unpivot(
+    index=["artist", "track", "date.entered"],
+    variable_name="week",
+    value_name="rank"
+)
+```
+
+There are three key arguments:
+
+- `index` specifies which columns **are not** pivoted, i.e. which columns are variables.
+- `variable_name` names the variable stored in the column names, we named that variable `week`.
+- `value_name` names the variable stored in the cell values, we named that variable `rank`.
+
+Now let's turn our attention to the resulting, longer data frame. What happens if a song is in the top 100 for less than 76 weeks? Take 2 Pack's "Baby Don't Cry", for example:
+
+```{python}
+billboard.unpivot(
+    index=["artist", "track", "date.entered"],
+    variable_name="week",
+    value_name="rank"
+).filter(
+    pl.col("artist") == "2 Pac", # using commas is another way to chain multiple ANDs
+    pl.col("track").str.starts_with("Baby Don't Cry")
+)
+```
+
+The `null` in the bottom of the table suggests that this song wasn't ranked in (at least) weeks 74-76. These `null`s don't really represent unknown observations; they were forced to exist by the structure of the dataset, so we can safely filter them out:
+
+```{python}
+billboard.unpivot(
+    index=["artist", "track", "date.entered"],
+    variable_name="week",
+    value_name="rank"
+).drop_nulls(
+    # no arguments will drop any row with `null`
+)
+```
+
+The number of rows is now much lower, indicating that many rows with `null`s were dropped.
+
+You might also wonder what happens if a song is in the top 100 for more than 76 weeks? We can’t tell from this data, but you might guess that additional columns `wk77`, `wk78`, `...` would be added to the dataset.
+
+This data is now tidy, but we could make future computation a bit easier by converting values of `week` and `rank` from character strings to numbers using `DataFrame.with_columns()`.
+
+```{python}
+billboard_longer = (
+    billboard
+    .unpivot(
+        index=["artist", "track", "date.entered"],
+        variable_name="week",
+        value_name="rank"
+    ).drop_nulls(
+
+    ).with_columns(
+        pl.col("week").str.extract(r"(\d+)").str.to_integer(),
+        pl.col("rank").str.to_integer()
+    )
+)
+
+billboard_longer
+```
+
+Now that we have all the week numbers in one variable and all the rank values in another, we’re in a good position to visualize how song ranks vary over time.
+
+```{python}
+px.line(
+    billboard_longer, x="week", y="rank", line_group="track"
+).update_traces( # we'll learn more about these extra methods in a later module
+    opacity=0.25
+).update_yaxes(
+    autorange="reversed"
+)
+```
+
+We can see that very few songs stay in the top 100 for more than 20 weeks.
+
+#### How does pivoting work?
+
+Now that you’ve seen how we can use pivoting to reshape our data, let’s take a little time to gain some intuition about what pivoting does to the data. Let’s start with a very simple dataset to make it easier to see what’s happening. Suppose we have three patients with `id`s A, B, and C, and we take two blood pressure measurements on each patient.
+
+```{python}
+df = pl.from_dict({
+    "id":  ["A", "B", "C"],
+    "bp1": [100, 140, 120],
+    "bp2": [120, 114, 125] 
+})
+
+df
+```
+
+We want our new dataset to have three variables: `id` (already exists), `measurement` (the column names), and `value` (the cell values). To achieve this, we need to pivot `df` longer:
+
+```{python}
+df.unpivot(
+    index = "id",
+    variable_name="measurement",
+    value_name="value"
+).sort(
+    ["id", "measurement", "value"]
+)
+```
+
+How does the reshaping work? It’s easier to see if we think about it column by column. As shown below, the values in a column that was already a variable in the original dataset (`id`) need to be repeated, once for each column that is pivoted.
+
+![Columns that are already variables need to be repeated, once for each column that is pivoted.](images/unpivot-variables.png)
+
+The column names become values in a new variable, whose name is defined by `variable_name`, as shown below. THey need to be repeated once for each row in the original dataset.
+
+![The column names of pivoted columns become values in a new column. The values need to be repeated once for each row of the original dataset.](images/unpivot-column-names.png)
+
+The cell values also become values in a new variable, with a name defined by `values_name`. They are unwound row by row, as shown below.
+
+![The number of values is preserved (not repeated), but unwound row-by-row.](images/unpivot-cell-values.png)
+
+#### More variables in column names
+
+A more challenging situation occurs when you have multiple pieces of information crammed into the column names, and you would like to store these in separate new variables. For example, take the `who` dataset, the source of `table1` and friends you saw above:
+
+```{python}
+#| echo: false
+
+who2 = pl.read_csv("data/who2.csv", null_values="")
+```
+
+```{python}
+who2.glimpse()
+```
+
+This dataset, collected by the World Health Organization, records information about tuberculosis diagnoses. There are two columns that are already variables and are easy to interpret: `country` and `year`. They are followed by 56 columns like `sp_m_014`, `ep_m_4554`, and `rel_m_3544`. If you stare at these columns for long enough, you’ll notice there’s a pattern. Each column name is made up of three pieces separated by `_`. The first piece, `sp`/`rel`/`ep`, describes the method used for the diagnosis, the second piece, `m`/`f` is the gender (coded as a binary variable in this dataset), and the third piece, `014`/`1524`/`2534`/`3544`/`4554`/`5564`/`65` is the age range (`014` represents 0-14, for example).
+
+So in this case, we have six pieces of information recorded in `who2`: the country and the year (already columns); the method of diagnosis, the gender category, and the age range category (contained in the other column names); and the count of patients in that category (cell values). 
+
+To organize these six pieces of information in six separate columns, first we use `DataFrame.unpivot()` like before, then we have to do some data wrangling using [`list` expressions](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.list.get.html) to split the information from the column names into separate columns:
+
+1. Unpivot:
+
+```{python}
+step1 = who2.unpivot(
+    index=["country", "year"],
+    variable_name="key",
+    value_name="count"
+)
+
+step1
+```
+
+2. Split the `key` column into `diagnosis`, `gender`, and `age` columns:
+
+```{python}
+step2 = step1.with_columns(
+    pl.col("key").str.split("_")
+)
+
+step2
+```
+
+3. Extract each list element into a new column:
+
+```{python}
+step3 = step2.select(
+    pl.col("country"),
+    pl.col("year"),
+    pl.col("key").list.get(0).alias("diagnosis"), # Polars also uses 0-indexing
+    pl.col("key").list.get(1).alias("gender"),
+    pl.col("key").list.get(2).alias("age"),
+    pl.col("count")
+)
+
+step3
+```
+
+All together:
+
+```{python}
+#| eval: false
+
+(
+    who2.unpivot(
+        index=["country", "year"], variable_name="key", value_name="count"
+    )
+    .with_columns(
+        pl.col("key").str.split("_")
+    )
+    .select(
+        pl.col("country"),
+        pl.col("year"),
+        pl.col("key").list.get(0).alias("diagnosis"),
+        pl.col("key").list.get(1).alias("gender"),
+        pl.col("key").list.get(2).alias("age"),
+        pl.col("count")
+    )
+)
+```
+
+While the above steps break down the process to understand easier, here is a more concise, albeit more advanced, way to achieve the same results:
+
+```{python}
+(
+    who2.unpivot(
+        index=["country", "year"], 
+        variable_name="key", 
+        value_name="count"
+    )
+    .with_columns(
+        pl.col("key")
+        .str.split("_")
+        .list.to_struct(fields=["diagnosis", "gender", "age"])
+    )
+    .unnest("key")
+)
+```
+
+Conceptually, this is only a minor variation on the simpler case you’ve already seen. The figure below shows the basic idea: now, instead of the column names pivoting into a single column, they pivot into multiple columns.
+
+![Pivoting columns with multiple pieces of information in the names means that each column name now fills in values in multiple output columns.](images/unpivot-multiple-names.png)
+
+### Widening data
+
+So far we've used `DataFrame.unpivot()` to solve the common class of problems where values have ended up in column names. Next we’ll pivot (HA HA) to `DataFrame.pivot()`, which makes datasets **wider** by increasing columns and reducing rows and helps when one observation is spread across multiple rows. This seems to arise less commonly in the wild, but it does seem to crop up a lot when dealing with governmental data.
+
+We’ll start by looking at `cms_patient_experience`, a dataset from the Centers of Medicare and Medicaid services that collects data about patient experiences:
+
+```{python}
+#| echo: false
+
+cms_patient_experience = pl.read_csv(
+    "data/cms_patient_experience.csv", 
+    schema_overrides={"org_pac_id": pl.String}
+)
+```
+
+```{python}
+cms_patient_experience
+```
+
+The core unit being studied is an organization, but each organization is spread across six rows, with one row for each measurement taken in the survey organization. We can see the complete set of values for `measure_cd` and `measure_title` by using `DataFrame.unique().select()`:
+
+```{python}
+cols = ["measure_cd", "measure_title"]
+
+cms_patient_experience.unique(subset=cols).select(cols).sort(cols)
+```
+
+Neither of these columns will make particularly great variable names: `measure_cd` doesn’t hint at the meaning of the variable and `measure_title` is a long sentence containing spaces. We’ll use `measure_cd` as the source for our new column names for now, but in a real analysis you might want to create your own variable names that are both short and meaningful.
+
+`DataFrame.pivot()` has a similar, but different, interface than `DataFrame.unpivot()`: you still select the `index` columns (the columns that remain), but now you select which column the `values` will come from, and which column the names come from (`on`).
+
+```{python}
+cms_patient_experience.pivot(
+    index=["org_pac_id", "org_nm"],
+    on=["measure_cd"], # Notice we don't use `measure_title`
+    values="prf_rate"
+)
+```
+
+#### How does `DataFrame.pivot()` work?
+
+To understand how `DataFrame.pivot()` works, let’s again start with a very simple dataset. This time we have two patients with `id`s A and B, we have three blood pressure measurements on patient A and two on patient B:
+
+```{python}
+df = pl.from_dict({
+    "id": ["A", "B", "B", "A", "A"],
+    "measurement": ["bp1", "bp1", "bp2", "bp2", "bp3"],
+    "value": [100, 140, 115, 120, 105]
+})
+```
+
+We’ll take the values from the `value` column and the names from the `measurement` column:
+
+```{python}
+df.pivot(on="measurement", values="value") # unused cols get put in `index`
+```
+
+To begin the process, `DataFrame.pivot()` needs to first figure out what will go in the rows and columns. The new column names will be the unique values of `measurement`.
+
+```{python}
+df.select("measurement").unique()
+```
+
+By default, the rows in the output are determined by all the variables that aren’t going into the new names or values. These are called the `index` columns. Here there is only one column, but in general there can be any number.
+
+```{python}
+df.select(pl.exclude("measurement", "value")).unique()
+```
+
+`DataFrame.pivot()` then combines these results to generate an empty data frame:
+
+```{python}
+df.select(pl.exclude("measurement", "value")).unique().with_columns(
+    x=pl.lit(None), y=pl.lit(None), z=pl.lit(None)
+)
+```
+
+It then fills in all the missing values using the data in the input. In this case, not every cell in the output has a corresponding value in the input as there’s no third blood pressure measurement for patient B, so that cell remains missing. 
+
+#### Data and variable names in the column headers
+
+We will now see an example where we need to unpivot and pivot in the same set of steps to tidy our data. This step up in complexity is when the column names include a mix of variable values and variable names. For example, take the `household` dataset:
+
+```{python}
+household = pl.from_dict({
+    "family": [1, 2, 3, 4, 5],
+    "dob_child1": ["1998-11-26", "1996-06-22", "2002-07-11", "2004-10-10", "2000-12-05"],
+    "dob_child2": ["2000-01-29", None, "2004-04-05", "2009-08-27", "2005-02-28"],
+    "name_child1": ["Susan", "Mark", "Sam", "Craig", "Parker"],
+    "name_child2": ["Jose", None, "Seth", "Khai", "Gracie"]
+}).with_columns(
+    cs.starts_with("dob").str.to_date()
+)
+
+household
+```
+
+This dataset contains data about five families, with the names and dates of birth of up to two children. The new challenge in this dataset is that the column names contain the names of two variables (`dob`, `name`) and the values of another (`child`, with values 1 or 2).
+
+```{python}
+(
+    # First, unpivot the data frame to create rows for each family-column combination
+    household.unpivot(index="family")
+
+    # Extract the base column name (dob/name) and the child number
+    .with_columns(
+        pl.col("variable")
+        .str.split("_")
+        .list.to_struct(fields=["base_col", "child"])
+    )
+    .unnest("variable")
+
+    # Pivot the data to create separate columns for each base_col (dob, name)
+    .pivot(index=["family", "child"], on="base_col", values="value")
+
+    # Filter out rows with null values
+    .drop_nulls()
+
+    # Clean up results
+    .sort(["family", "child"])
+    .with_columns(pl.col("dob").str.to_date())
+)
+```
+
+We use `DataFrame.drop_nulls()` since the shape of the input forces the creation of explicit missing variables (e.g., for families that only have one child).
+
+### Summary
+
+In this section, you learned about tidy data: data that has variables in columns and observations in rows. Tidy data makes working in the Polars easier, because it’s a consistent structure understood by most functions, the main challenge is transforming the data from whatever structure you receive it in to a tidy format. To that end, you learned about `DataFrame.unpivot()` and `DataFrame.pivot()` which allow you to tidy up many untidy datasets.
+
+Another challenge is that, for a given dataset, it can be impossible to label the longer or the wider version as the "tidy" one. This is partly a reflection of our definition of tidy data, where we said tidy data has one variable in each column, but we didn’t actually define what a variable is (and it’s surprisingly hard to do so). It’s totally fine to be pragmatic and to say a variable is whatever makes your analysis easiest. So if you’re stuck figuring out how to do some computation, consider switching up the organization of your data; don’t be afraid to untidy, transform, and re-tidy as needed!
+
+## Data import
+
+Working with data provided by Python packages is a great way to learn data science tools, but at some point, you'll want to apply what you've learned to your own data. In this chapter, you'll learn the basics of reading data files into Python.
+
+Specifically, this chapter will focus on reading plain-text rectangular files. We'll start with practical advice for handling features like column names, types, and missing data. You will then learn about reading data from multiple files at once and writing data from Python to a file. Finally, you'll learn how to handcraft data frames in Python.
+
+```{python}
+import polars as pl
+import io # we'll use this to "create" CSVs within Python examples
+```
+
+### Reading data from a file
+
+To begin, we'll focus on the most common rectangular data file type: CSV, which is short for comma-separated values. Here is what a simple CSV file looks like. The first row, commonly called the header row, gives the column names, and the following six rows provide the data. The columns are separated, aka delimited, by commas.
+
+```
+Student ID,Full Name,favourite.food,mealPlan,AGE
+1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+2,Barclay Lynn,French fries,Lunch only,5
+3,Jayendra Lyne,N/A,Breakfast and lunch,7
+4,Leon Rossini,Anchovies,Lunch only,
+5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+6,Güvenç Attila,Ice cream,Lunch only,6
+```
+
+The following table shows a representation of the same data as a table:
+
+| Student ID | Full Name         | favourite.food     | mealPlan            | AGE  |
+|------------|-------------------|--------------------|---------------------|------|
+| 1          | Sunil Huffmann    | Strawberry yoghurt | Lunch only          | 4    |
+| 2          | Barclay Lynn      | French fries       | Lunch only          | 5    |
+| 3          | Jayendra Lyne     | N/A                | Breakfast and lunch | 7    |
+| 4          | Leon Rossini      | Anchovies          | Lunch only          | NULL |
+| 5          | Chidiegwu Dunkel  | Pizza              | Breakfast and lunch | five |
+| 6          | Guvenc Attila     | Ice cream          | Lunch only          | 6    |
+
+We can read this file into Python using `pl.read_csv()`. The first argument is the most important: the path to the file. You can think about the path as the address of the file: the file is called `students.csv` and it lives in the `data` folder.
+
+```{python}
+students = pl.read_csv("data/students.csv")
+```
+
+The code above will work if you have the students.csv file in a data folder in your project. You can also read it directly from a URL:
+
+```python
+students = pl.read_csv("https://raw.githubusercontent.com/hadley/r4ds/main/data/students.csv")
+```
+
+When you run `pl.read_csv()`, Polars will scan the file and automatically infer column types based on the data it contains. Polars doesn't print a detailed message about column specifications by default, but you can examine the schema to see the inferred types:
+
+```{python}
+students.schema.to_frame()
+```
+
+#### Practical advice
+
+Once you read data in, the first step usually involves transforming it in some way to make it easier to work with in the rest of your analysis. Let's take another look at the students data with that in mind.
+
+```{python}
+students
+```
+
+In the `favourite.food` column, there's an entry "N/A" that should be interpreted as a real `None` that Python will recognize as "not available". This is something we can address using the `null_values` argument. By default, Polars only recognizes empty strings and the string "null" (case-insensitive) as missing values.
+
+```{python}
+students = pl.read_csv(
+    "data/students.csv", 
+    null_values=["N/A", ""]
+)
+
+students
+```
+
+You might also notice that `Student ID` and `Full Name` columns contain spaces, which can make them awkward to work with in code. In Polars, you can refer to these columns using either bracket notation or with the `.` accessor, but the latter won't work with spaces or special characters:
+
+```{python}
+#| error: true
+
+# Works with spaces
+first_student_name = students["Full Name"][0]
+print(first_student_name)
+
+# Won't work with spaces
+first_student_name = students.Full Name[0]  # Syntax error!
+```
+
+It's often a good idea to rename these columns to follow Python naming conventions. Here's how you can rename specific columns:
+
+```{python}
+students = students.rename({
+    "Student ID": "student_id",
+    "Full Name": "full_name"
+})
+
+students
+```
+
+An alternative approach is to use a function to clean all column names at once. Polars doesn't have a built-in function for this, but we can easily create one:
+
+```{python}
+def clean_names(df):
+    return df.rename({col: col.lower().replace(" ", "_").replace(".", "_") for col in df.columns})
+
+students = clean_names(students)
+students
+```
+
+Another common task after reading in data is to consider variable types. For example, `meal_plan` is a categorical variable with a known set of possible values, which in Python should be represented as a category:
+
+```{python}
+students = students.with_columns(
+    pl.col("mealplan").cast(pl.Categorical)
+)
+students
+```
+
+Before you analyze this dataset, you'll probably want to fix the age column. Currently, `age` contains mixed types because one observation is typed out as "five" instead of the number 5:
+
+```{python}
+students = students.with_columns(
+    age=pl.when(pl.col("age") == "five")
+    .then(pl.lit(5))
+    .otherwise(pl.col("age").cast(pl.Int64, strict=False))
+)
+
+students
+```
+
+The Polars code above uses a conditional expression with `when()`, `then()`, and `otherwise()` to handle the special case, then attempts to cast the column to a floating-point number. The `strict=False` parameter tells Polars to convert values that can be parsed as numbers and set the rest to `None`.
+
+#### Other arguments
+
+Usually, `pl.read_csv()` uses the first line of the data for the column names, which is a very common convention. But it's not uncommon for a few lines of metadata to be included at the top of the file. You can use `skip_rows` to skip the first n lines:
+
+```{python}
+csv_data = """The first line of metadata
+The second line of metadata
+x,y,z 
+1,2,3"""
+
+pl.read_csv(io.StringIO(csv_data), skip_rows=2)
+```
+
+In other cases, the data might not have column names. You can use `has_header=False` to tell Polars not to treat the first row as headings:
+
+```{python}
+csv_data = """1,2,3
+4,5,6"""
+
+pl.read_csv(io.StringIO(csv_data), has_header=False)
+```
+
+By default, Polars will name the columns "column_1", "column_2", etc. You can provide your own column names with the `new_columns` parameter:
+
+```{python}
+csv_data = """1,2,3
+4,5,6"""
+
+pl.read_csv(
+    io.StringIO(csv_data), 
+    has_header=False,
+    new_columns=["x", "y", "z"]
+)
+```
+
+These arguments are all you need to know to read the majority of CSV files that you'll encounter in practice. (For the rest, you'll need to carefully inspect your .csv file and read the documentation for `pl.read_csv()`'s many other arguments.)
+
+#### Other file types
+
+Once you've mastered `read_csv()`, using Polars' other functions is straightforward; it's just a matter of knowing which function to reach for:
+
+- `read_csv()` reads comma-separated files.
+- `read_csv()` can also read semicolon-separated files by setting `separator=";"`.
+- `read_csv()` can read tab-delimited files by setting `separator="\t"`, or you can use the alias `read_tsv()`.
+- `read_csv()` can read files with any delimiter by setting the `separator` parameter.
+- `read_ndjson()` reads newline-delimited JSON files.
+- `read_parquet()` reads Apache Parquet files, a columnar storage format that is typically faster and more space-efficient than CSV.
+- `read_ipc()` or `read_arrow()` reads Arrow IPC files, which provide high-performance interoperability between different systems.
+- `read_excel()` reads Excel files (learn more about the different Excel features [here](https://docs.pola.rs/user-guide/io/excel/)).
+- `read_avro()` reads Avro files.
+
+### Controlling column types
+
+A CSV file doesn't contain any information about the type of each variable (i.e., whether it's a boolean, number, string, etc.), so Polars will try to guess the type. This section describes how the guessing process works, how to resolve some common problems that cause it to fail, and how to supply the column types yourself.
+
+#### Guessing types
+
+Polars uses a heuristic to figure out the column types. By default, it samples a certain number of rows from the file and tries to infer the type based on the values it sees. You can control this with the `infer_schema_length` parameter.
+
+The type inference generally follows these rules:
+- If values are "true" or "false" (case-insensitive), it's a boolean.
+- If values are all integers, it's an integer type.
+- If values have decimals but are all numeric, it's a floating-point type.
+- If values match a date or datetime pattern, it's a date or datetime type.
+- Otherwise, it's a string type.
+
+You can see that behavior with a simple example:
+
+```{python}
+csv_data = """logical,numeric,date,string
+TRUE,1,2021-01-15,abc
+false,4.5,2021-02-15,def
+T,Inf,2021-02-16,ghi"""
+
+pl.read_csv(io.StringIO(csv_data))
+```
+
+This heuristic works well if you have a clean dataset, but in real life, you'll encounter a variety of challenges that require special handling.
+
+#### Missing values, column types, and problems
+
+The most common way column detection fails is that a column contains unexpected values, and you get a string column instead of a more specific type. One of the most common causes is a missing value recorded using something other than the `None` that Polars expects.
+
+Take this simple 1-column CSV file as an example:
+
+```{python}
+simple_csv = """x
+10
+.
+20
+30"""
+
+# Read without specifying null values
+pl.read_csv(io.StringIO(simple_csv))
+```
+
+If we read it without any additional arguments, `x` becomes a string column. In this very small example, you can easily see the missing value `.`. But what if you have thousands of rows with only a few missing values represented by `.`s scattered throughout?
+
+In Polars, you can specify the column type and tell it what values should be treated as null:
+
+```{python}
+pl.read_csv(
+    io.StringIO(simple_csv),
+    schema_overrides={"x": pl.Int64},
+    null_values=["."],
+)
+```
+
+#### Column types
+
+Polars provides many data types that you can specify:
+
+- `pl.Boolean`: For logical values (True/False)
+- `pl.Int8`, `pl.Int16`, `pl.Int32`, `pl.Int64`: For integers of different sizes
+- `pl.UInt8`, `pl.UInt16`, `pl.UInt32`, `pl.UInt64`: For unsigned integers (positive only)
+- `pl.Float32`, `pl.Float64`: For floating-point numbers
+- `pl.Decimal`: For precise decimal arithmetic
+- `pl.Utf8`: For string data
+- `pl.Categorical`: For categorical (factor) data
+- `pl.Date`, `pl.Time`, `pl.Datetime`: For date and time data
+- `pl.Object`: For Python objects that don't fit the other types
+- `pl.Binary`: For binary data
+- `pl.Struct`: For nested data structures
+
+You can specify column types in two ways:
+
+1. Using the `schema` or `schema_overrides` parameter when reading data
+2. Using `cast()` to convert columns after reading
+
+```{python}
+# Specify types when reading
+csv_data = """x,y,z
+1,2,3"""
+
+df = pl.read_csv(
+    io.StringIO(csv_data),
+    schema_overrides={
+        "x": pl.Int32,
+        "y": pl.Float64,
+        "z": pl.Utf8
+    }
+)
+print(df.schema)
+
+# Or convert after reading
+df = pl.read_csv(io.StringIO(csv_data))
+df = df.with_columns([
+    pl.col("x").cast(pl.Int32),
+    pl.col("y").cast(pl.Float64),
+    pl.col("z").cast(pl.Utf8)
+])
+print(df.schema)
+```
+
+You can also specify a schema for all columns at once:
+
+```{python}
+schema = {"x": pl.Int32, "y": pl.Float64, "z": pl.Utf8}
+df = pl.read_csv(io.StringIO(csv_data), schema=schema)
+print(df.schema)
+```
+
+If you want to select only specific columns when reading a file, you can use the `columns` parameter:
+
+```{python}
+df = pl.read_csv(io.StringIO(csv_data), columns=["x"])
+print(df)
+```
+
+### Reading data from multiple files
+
+Sometimes your data is split across multiple files instead of being contained in a single file. For example, you might have sales data for multiple months, with each month's data in a separate file: `01-sales.csv` for January, `02-sales.csv` for February, and `03-sales.csv` for March.
+
+With Polars, you can read these files one by one and then concatenate them:
+
+```python
+# List of sales files
+sales_files = [
+    "data/01-sales.csv",
+    "data/02-sales.csv",
+    "data/03-sales.csv"
+]
+
+# Read and concatenate via list comprehension
+dfs = [pl.read_csv(file).with_columns(pl.lit(os.path.basename(file)).alias("file")) 
+       for file in sales_files]
+sales = pl.concat(dfs)
+print(sales)
+```
+
+::: {.callout-tip}
+This method uses something called List Comprehension, which you can learn more about [here](https://www.w3schools.com/python/python_lists_comprehension.asp).
+:::
+
+You can download these files from the URLs mentioned in the original chapter, or read them directly:
+
+```python
+sales_files = [
+    "https://pos.it/r4ds-01-sales",
+    "https://pos.it/r4ds-02-sales",
+    "https://pos.it/r4ds-03-sales"
+]
+
+dfs = [pl.read_csv(file).with_columns(pl.lit(file).alias("file")) 
+       for file in sales_files]
+sales = pl.concat(dfs)
+print(sales)
+```
+
+If you have many files you want to read in, you can use the `glob` module to find the files by matching a pattern:
+
+```python
+import glob
+
+sales_files = glob.glob("data/*-sales.csv")
+sales_files
+```
+
+## 7.5 Writing to a file
+
+Polars provides several functions for writing data to disk. The most common are `write_csv()` and `write_parquet()`. The most important arguments to these functions are the DataFrame to save and the file path where you want to save it.
+
+```python
+students.write_csv("students.csv")
+```
+
+Now let's read that CSV file back in. Note that the variable type information you set up is lost when you save to CSV because you're starting over with reading from a plain text file. This makes CSVs somewhat unreliable for caching interim results—you need to recreate the column specification every time you load in. There are two better alternatives:
+
+1.[Parquet files](https://www.databricks.com/glossary/what-is-parquet) maintain the column types and are generally faster and more space-efficient:
+
+```python
+students.write_parquet("students.parquet")
+parquet_students = pl.read_parquet("students.parquet")
+```
+
+2. For Python-specific caching, you can use the [pickle format](https://www.geeksforgeeks.org/understanding-python-pickling-example/) through libraries like `joblib`:
+
+```python
+import joblib
+
+joblib.dump(students, "students.joblib")
+joblib_students = joblib.load("students.joblib")
+print(joblib_students)
+```
+
+Parquet is usually preferable because it's cross-language compatible, more efficient, and maintains your data types.
+
+### Data entry
+
+Sometimes you'll need to assemble a `DataFrame` "by hand" with a little data entry in your Python script. Polars provides a simple way to create data frames from dictionaries where each key is a column name and each value is a list of values:
+
+```{python}
+df = pl.DataFrame({
+    "x": [1, 2, 5],
+    "y": ["h", "m", "g"],
+    "z": [0.08, 0.83, 0.60]
+})
+
+df
+```
+
+You can also create a data frame from a list of dictionaries, where each dictionary represents a row:
+
+```{python}
+df = pl.DataFrame([
+    {"x": 1, "y": "h", "z": 0.08},
+    {"x": 2, "y": "m", "z": 0.83},
+    {"x": 5, "y": "g", "z": 0.60}
+])
+
+df
+```
+
+### Summary
+
+In this section, you've learned how to load CSV files with Polars' `pl.read_csv()` and how to do your own data entry by creating DataFrames from dictionaries and lists. You've learned how CSV files work, some of the problems you might encounter, and how to overcome them.
+
+We'll revisit data import in various formats throughout your Python data science journey, including Excel files, databases, Parquet files, JSON, and data from websites. 
+
+Polars is an excellent choice for data handling, especially on powerful computers like yours, as it's designed to take advantage of modern hardware through parallel processing and memory efficiency. As you become more familiar with Python data science tools, you'll appreciate Polars' performance benefits and elegant API design.

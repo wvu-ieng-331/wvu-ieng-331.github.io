@@ -5,8 +5,13 @@ description = "Course website for IENG 331: Computer Applications in Industrial 
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "billboard>=0.4.0",
     "ipython>=8.31.0",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.0",
-    "plotly>=5.24.1",
+    "nycflights13>=0.0.3",
+    "palmerpenguins>=0.1.4",
+    "plotly[express]>=6.0.0",
+    "polars[all]>=1.22.0",
+    "statsmodels>=0.14.4",
 ]

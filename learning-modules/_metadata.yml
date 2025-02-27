@@ -8,5 +8,5 @@ author:
 format: 
   html:
     number-sections: true
-    toc-depth: 3
+    toc-depth: 4
     toc-expand: 2

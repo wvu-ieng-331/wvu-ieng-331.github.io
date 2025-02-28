@@ -1641,7 +1641,7 @@ sales_files = glob.glob("data/*-sales.csv")
 sales_files
 ```
 
-## 7.5 Writing to a file
+## Writing to a file
 
 Polars provides several functions for writing data to disk. The most common are `write_csv()` and `write_parquet()`. The most important arguments to these functions are the DataFrame to save and the file path where you want to save it.
 
@@ -1702,4 +1702,27 @@ In this section, you've learned how to load CSV files with Polars' `pl.read_csv(
 
 We'll revisit data import in various formats throughout your Python data science journey, including Excel files, databases, Parquet files, JSON, and data from websites. 
 
-Polars is an excellent choice for data handling, especially on powerful computers like yours, as it's designed to take advantage of modern hardware through parallel processing and memory efficiency. As you become more familiar with Python data science tools, you'll appreciate Polars' performance benefits and elegant API design.
+Polars is an excellent choice for data handling, as it's designed to take advantage of modern hardware through parallel processing and memory efficiency. As you become more familiar with Python data science tools, you'll appreciate Polars' performance benefits and elegant API design.
+
+## Exercises
+
+1. Does it matter what order you used `DataFrame.filter()` and `DataFrame.sort()` if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.
+
+2. What happens if you specify the name of the same variable multiple times in a `DataFrame.select()` call?
+
+3. Using the `penguins` dataset, make a scatter plot of `bill_depth_mm` vs. `bill_length_mm`. That is, make a scatterplot with `bill_depth_mm` on the y-axis and `bill_length_mm` on the x-axis. Describe the relationship between these two variables.
+
+4. From the `flights` dataset, compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
+
+5. In a single pipeline for each condition, find all `flights` that meet the condition:
+
+    - Had an arrival delay of two or more hours
+    - Flew to Houston (IAH or HOU)
+    - Were operated by United, American, or Delta
+    - Departed in summer (July, August, and September)
+    - Arrived more than two hours late but didn’t leave late
+    - Were delayed by at least an hour, but made up over 30 minutes in flight
+
+6. Find the flights that are most delayed upon departure from each destination.
+
+7. How do delays vary over the course of the day? Illustrate your answer with a plot.

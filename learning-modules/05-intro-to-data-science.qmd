@@ -52,7 +52,7 @@ pl.Config(tbl_rows=8)
 
 In this beginning chapter, we will cover the fundamentals of data analysis in the form of **importing**, **tidying**, **transforming**, and **visualizing data**, as shown below:
 
-![In this learning module, you’ll learn how to import, tidy, transform, and visualize data.](images/whole-game.png)
+![In this learning module, you'll learn how to import, tidy, transform, and visualize data.](images/whole-game.png)
 
 By the end of this module, you will be able to:
 
@@ -68,7 +68,7 @@ By the end of this module, you will be able to:
 At this point, you will need to install a few more Python packages:
 
 ```{.bash filename="terminal"}
-uv add polars[all] plotly[express] statsmodels palmerpenguins nycflights13 billboard
+uv add polars[all] plotly[express] statsmodels palmerpenguins nycflights13
 ```
 
 Once installed, import the following:
@@ -78,7 +78,9 @@ Once installed, import the following:
 
 import plotly.express as px
 import polars as pl
+import polars.selectors as cs
 import palmerpenguins
+import nycflights13
 ```
 
 ## Data visualization
@@ -178,13 +180,13 @@ px.scatter(data_frame=penguins, x="flipper_length_mm", y="body_mass_g")
 
 `px.scatter()` creates a [scatter plot](https://plotly.com/python/line-and-scatter/), and we will learn many more plot types through out the course. You can learn more about the different plots Plotly Express offers at their [gallery](https://plotly.com/python/plotly-express/#gallery).
 
-This doesn't match our "final goal" *yet*, but using this plot we can start answering the question that motivated our exploration: "What does the relationship between flipper length and body mass look like?" The relationship appears to be positive (as flipper length increases, so does body mass), fairly linear (the points are clustered around a line instead of a curve), and moderately strong (there isn’t too much scatter around such a line). Penguins with longer flippers are generally larger in terms of their body mass.
+This doesn't match our "final goal" *yet*, but using this plot we can start answering the question that motivated our exploration: "What does the relationship between flipper length and body mass look like?" The relationship appears to be positive (as flipper length increases, so does body mass), fairly linear (the points are clustered around a line instead of a curve), and moderately strong (there isn't too much scatter around such a line). Penguins with longer flippers are generally larger in terms of their body mass.
 
 Before we go further, I want to point out that this dataset has some missing values for `flipper_length_mm` and `body_mass_g`, but Plotly does not warn you about this when creating the plot. If one and/or other variable is missing data, we cannot plot that.
 
 ### Adding aesthetics and layers
 
-Scatter plots are useful for displaying the relationship between two numerical variables, but it’s always a good idea to be skeptical of any apparent relationship between two variables and ask if there may be other variables that explain or change the nature of this apparent relationship. For example, does the relationship between flipper length and body mass differ by species? Let’s incorporate species into our plot and see if this reveals any additional insights into the apparent relationship between these variables. We will do this by representing species with different colored points.
+Scatter plots are useful for displaying the relationship between two numerical variables, but it's always a good idea to be skeptical of any apparent relationship between two variables and ask if there may be other variables that explain or change the nature of this apparent relationship. For example, does the relationship between flipper length and body mass differ by species? Let's incorporate species into our plot and see if this reveals any additional insights into the apparent relationship between these variables. We will do this by representing species with different colored points.
 
 To achieve this, we will use some of the other arguments that `px.scatter()` provides for us, like `color`:
 
@@ -393,7 +395,7 @@ To visualize the relationship between a numerical and a categorical variable we 
 
 !["Diagram depicting how a boxplot is created."](images/EDA-boxplot.png)
 
-Let’s take a look at the distribution of body mass by species using `px.box()`
+Let's take a look at the distribution of body mass by species using `px.box()`
 
 ```{python}
 px.box(penguins, x="species", y="body_mass_g")
@@ -411,7 +413,7 @@ As we've seen before, there are many ways to see and code what we are looking fo
 
 We can use stacked bar plots to visualize the relationship between two categorical variables. For example, the following two stacked bar plots both display the relationship between `island` and `species`, or specifically, visualizing the distribution of `species` within each island.
 
-The first plot shows the frequencies of each species of penguins on each island. The plot of frequencies shows that there are equal numbers of Adelies on each island. But we don’t have a good sense of the percentage balance within each island.
+The first plot shows the frequencies of each species of penguins on each island. The plot of frequencies shows that there are equal numbers of Adelies on each island. But we don't have a good sense of the percentage balance within each island.
 
 ```{python}
 px.bar(penguins, x="island", color="species")
@@ -465,25 +467,21 @@ px.scatter(
 
 ### Summary
 
-In this section, you’ve learned the basics of data visualization with Plotly Express. We started with the basic idea that underpins Plotly Express: a visualization is a mapping from variables in your data to aesthetic properties like position, color, size and shape. You then learned about increasing the complexity with more arguments in the Plotly functions. You also learned about commonly used plots for visualizing the distribution of a single variable as well as for visualizing relationships between two or more variables, by leveraging additional aesthetic mappings and/or splitting your plot into small multiples using faceting.
+In this section, you've learned the basics of data visualization with Plotly Express. We started with the basic idea that underpins Plotly Express: a visualization is a mapping from variables in your data to aesthetic properties like position, color, size and shape. You then learned about increasing the complexity with more arguments in the Plotly functions. You also learned about commonly used plots for visualizing the distribution of a single variable as well as for visualizing relationships between two or more variables, by leveraging additional aesthetic mappings and/or splitting your plot into small multiples using faceting.
 
 ## Data transformation
 
-Visualization is an important tool for generating insight, but it’s rare that you get the data in exactly the right form you need to make the graph you want. Often you’ll need to create some new variables or summaries to answer your questions with your data, or maybe you just want to rename the variables or reorder the observations to make the data a little easier to work with. We've already seen examples of this above when creating the bar charts. In this section, we'll see how to do that with the [Polars](https://docs.pola.rs/) package.
+Visualization is an important tool for generating insight, but it's rare that you get the data in exactly the right form you need to make the graph you want. Often you'll need to create some new variables or summaries to answer your questions with your data, or maybe you just want to rename the variables or reorder the observations to make the data a little easier to work with. We've already seen examples of this above when creating the bar charts. In this section, we'll see how to do that with the [Polars](https://docs.pola.rs/) package.
 
-The goal of this section is to give you an overview of all the key tools for transforming a data frame. We’ll start with functions that operate on rows and then columns of a data frame, then circle back to talk more about method chaining, an important tool that you use to combine functions. We will then introduce the ability to work with groups. We will end the section with a case study that showcases these functions in action.
+The goal of this section is to give you an overview of all the key tools for transforming a data frame. We'll start with functions that operate on rows and then columns of a data frame, then circle back to talk more about method chaining, an important tool that you use to combine functions. We will then introduce the ability to work with groups. We will end the section with a case study that showcases these functions in action.
 
 ### The `flights` data frame
 
 To explore basic Polars methods and expressions, we will use the `flights` data frame from the `nycflights13` package. This dataset contains all 336,776 flights that departed from New York City in 2013.
 
 ```{python}
-import nycflights13
-import polars as pl
-
 flights = (
-    pl
-    .from_pandas(nycflights13.flights)
+    pl.from_pandas(nycflights13.flights)
     .with_columns(pl.col("time_hour").str.to_datetime("%FT%TZ"))
 ) # We will learn what's going on here in later this section
 
@@ -600,11 +598,11 @@ flights.sort(
 )
 ```
 
-Note that the number of rows has not changed, we’re only arranging the data, we’re not filtering it.
+Note that the number of rows has not changed, we're only arranging the data, we're not filtering it.
 
 #### `DataFrame.unique()`
 
-[`DataFrame.unique()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.unique.html) finds all the unique rows in a dataset, so technically, it primarily operates on the rows. Most of the time, however, you’ll want the distinct combination of some variables, so you can also optionally supply column names:
+[`DataFrame.unique()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.unique.html) finds all the unique rows in a dataset, so technically, it primarily operates on the rows. Most of the time, however, you'll want the distinct combination of some variables, so you can also optionally supply column names:
 
 ```{python}
 # Remove duplicate rows, if any
@@ -639,7 +637,7 @@ Note that since we haven't assigned the result of the above computation back to 
 
 #### `DataFrame.select()`
 
-It’s not uncommon to get datasets with hundreds or even thousands of variables. In this situation, the first challenge is often just focusing on the variables you’re interested in. [`DataFrame.select()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.select.html) allows you to rapidly zoom in on a useful subset using operations based on the names of the variables:
+It's not uncommon to get datasets with hundreds or even thousands of variables. In this situation, the first challenge is often just focusing on the variables you're interested in. [`DataFrame.select()`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.select.html) allows you to rapidly zoom in on a useful subset using operations based on the names of the variables:
 
 - Select columns by name:
 
@@ -667,9 +665,9 @@ Polars also provides more advanced way to select columns using its [Selectors](h
 
 Selectors are available as functions imported from `polars.selectors`. Typical/recommended usage is to import the module as `cs` and employ selectors from there.
 
-```{python}
-import polars.selectors as cs
+```python
 import polars as pl
+import polars.selectors as cs
 ```
 
 There are a number of selectors you can use within select:
@@ -772,10 +770,7 @@ flights.bottom_k(k = 4, by = "arr_delay")
 You can create groups using more than one variable. For example, we could make a group for each date:
 
 ```{python}
-daily = (
-    flights
-    .group_by(["year", "month", "day"])
-)
+daily = flights.group_by(["year", "month", "day"])
 
 daily.max()
 ```
@@ -784,19 +779,13 @@ daily.max()
 
 ### Summary
 
-In this chapter, you’ve learned the tools that Polars provides for working with data frames. The tools are roughly grouped into three categories: those that manipulate the rows (like `DataFrame.filter()` and `DataFrame.sort()`) those that manipulate the columns (like `DataFrame.select()` and `DataFrame.with_columns()`) and those that manipulate groups (like `DataFrame.group_by()` and `GroupBy.agg()`). In this chapter, we’ve focused on these “whole data frame” tools, but you haven’t yet learned much about what you can do with the individual variable. We’ll return to that in a later module in the course, where each section provides tools for a specific type of variable.
+In this chapter, you've learned the tools that Polars provides for working with data frames. The tools are roughly grouped into three categories: those that manipulate the rows (like `DataFrame.filter()` and `DataFrame.sort()`) those that manipulate the columns (like `DataFrame.select()` and `DataFrame.with_columns()`) and those that manipulate groups (like `DataFrame.group_by()` and `GroupBy.agg()`). In this chapter, we've focused on these “whole data frame” tools, but you haven't yet learned much about what you can do with the individual variable. We'll return to that in a later module in the course, where each section provides tools for a specific type of variable.
 
 ## Data tidying
 
 In this section, you will learn a consistent way to organize your data in Python using a system called **tidy data**. Getting your data into this format requires some work up front, but that work pays off in the long term. Once you have tidy data, you will spend much less time munging data from one representation to another, allowing you to spend more time on the data questions you care about.
 
-You'll first learn the definition of tidy data and see it applied to a simple toy dataset. Then we’ll dive into the primary tool you’ll use for tidying data: pivoting. Pivoting allows you to change the form of your data without changing any of the values.
-
-```{python}
-import polars as pl
-import polars.selectors as cs
-import plotly.express as px
-```
+You'll first learn the definition of tidy data and see it applied to a simple toy dataset. Then we'll dive into the primary tool you'll use for tidying data: pivoting. Pivoting allows you to change the form of your data without changing any of the values.
 
 ### Tidy data
 
@@ -861,7 +850,7 @@ table2
 table3
 ```
 
-These are all representations of the same underlying data, but they are not equally easy to use. One of them, `table1`, will be much easier to work with Polars & Plotly because it’s **tidy**.
+These are all representations of the same underlying data, but they are not equally easy to use. One of them, `table1`, will be much easier to work with Polars & Plotly because it's **tidy**.
 
 There are three interrelated rules that make a dataset tidy:
 
@@ -873,9 +862,9 @@ There are three interrelated rules that make a dataset tidy:
 
 Why ensure that your data is tidy? There are two main advantages:
 
-1. There’s a general advantage to picking one consistent way of storing data. If you have a consistent data structure, it’s easier to learn the tools that work with it because they have an underlying uniformity.
+1. There's a general advantage to picking one consistent way of storing data. If you have a consistent data structure, it's easier to learn the tools that work with it because they have an underlying uniformity.
 
-2. There’s a specific advantage to placing variables in columns because it allows Polar's vectorized nature to shine. Plotly also works by default with tidy data formats, and requires (a little) workaround for wide formats.
+2. There's a specific advantage to placing variables in columns because it allows Polar's vectorized nature to shine. Plotly also works by default with tidy data formats, and requires (a little) workaround for wide formats.
 
 Here are some examples of how Polars & Plotly work with tidy data:
 
@@ -914,13 +903,13 @@ While we are covering the basics of tidy data, I highly recommend reading [Tidy 
 
 ### Lengthening data
 
-The principles of tidy data might seem so obvious that you wonder if you’ll ever encounter a dataset that isn’t tidy. Unfortunately, however, most real data is untidy. There are two main reasons:
+The principles of tidy data might seem so obvious that you wonder if you'll ever encounter a dataset that isn't tidy. Unfortunately, however, most real data is untidy. There are two main reasons:
 
-1. Data is often organized to facilitate some goal other than analysis. For example, it’s common for data to be structured to make data entry, not analysis, easy.
+1. Data is often organized to facilitate some goal other than analysis. For example, it's common for data to be structured to make data entry, not analysis, easy.
 
-2. Most people aren’t familiar with the principles of tidy data, and it’s hard to derive them yourself unless you spend a lot of time working with data.
+2. Most people aren't familiar with the principles of tidy data, and it's hard to derive them yourself unless you spend a lot of time working with data.
 
-This means that most real analyses will require at least a little tidying. You’ll begin by figuring out what the underlying variables and observations are. Sometimes this is easy; other times you’ll need to consult with the people who originally generated the data. Next, you’ll **pivot** your data into a tidy form, with variables in the columns and observations in the rows.
+This means that most real analyses will require at least a little tidying. You'll begin by figuring out what the underlying variables and observations are. Sometimes this is easy; other times you'll need to consult with the people who originally generated the data. Next, you'll **pivot** your data into a tidy form, with variables in the columns and observations in the rows.
 
 Polars provides two methods for pivoting data: `DataFrame.pivot()` and `DataFrame.unpivot()`. We'll first start with `DataFrame.unpivot()` because it's the most common case. Let's dive into some examples.
 
@@ -929,14 +918,7 @@ Polars provides two methods for pivoting data: `DataFrame.pivot()` and `DataFram
 The `billboard` dataset records the billboard rank of songs in the year 2000:
 
 ```{python}
-#| echo: false
-billboard = pl.read_csv(
-    "data/billboard.csv",
-    try_parse_dates=True
-)
-```
-
-```{python}
+billboard = pl.read_csv("data/billboard.csv", try_parse_dates=True)
 billboard
 ```
 
@@ -985,7 +967,7 @@ billboard.unpivot(
 
 The number of rows is now much lower, indicating that many rows with `null`s were dropped.
 
-You might also wonder what happens if a song is in the top 100 for more than 76 weeks? We can’t tell from this data, but you might guess that additional columns `wk77`, `wk78`, `...` would be added to the dataset.
+You might also wonder what happens if a song is in the Top 100 for more than 76 weeks? We can't tell from this data, but you might guess that additional columns `wk77`, `wk78`, `...` would be added to the dataset.
 
 This data is now tidy, but we could make future computation a bit easier by converting values of `week` and `rank` from character strings to numbers using `DataFrame.with_columns()`.
 
@@ -1007,7 +989,7 @@ billboard_longer = (
 billboard_longer
 ```
 
-Now that we have all the week numbers in one variable and all the rank values in another, we’re in a good position to visualize how song ranks vary over time.
+Now that we have all the week numbers in one variable and all the rank values in another, we're in a good position to visualize how song ranks vary over time.
 
 ```{python}
 px.line(
@@ -1023,7 +1005,7 @@ We can see that very few songs stay in the top 100 for more than 20 weeks.
 
 #### How does pivoting work?
 
-Now that you’ve seen how we can use pivoting to reshape our data, let’s take a little time to gain some intuition about what pivoting does to the data. Let’s start with a very simple dataset to make it easier to see what’s happening. Suppose we have three patients with `id`s A, B, and C, and we take two blood pressure measurements on each patient.
+Now that you've seen how we can use pivoting to reshape our data, let's take a little time to gain some intuition about what pivoting does to the data. Let's start with a very simple dataset to make it easier to see what's happening. Suppose we have three patients with `id`s A, B, and C, and we take two blood pressure measurements on each patient.
 
 ```{python}
 df = pl.from_dict({
@@ -1047,7 +1029,7 @@ df.unpivot(
 )
 ```
 
-How does the reshaping work? It’s easier to see if we think about it column by column. As shown below, the values in a column that was already a variable in the original dataset (`id`) need to be repeated, once for each column that is pivoted.
+How does the reshaping work? It's easier to see if we think about it column by column. As shown below, the values in a column that was already a variable in the original dataset (`id`) need to be repeated, once for each column that is pivoted.
 
 ![Columns that are already variables need to be repeated, once for each column that is pivoted.](images/unpivot-variables.png)
 
@@ -1064,16 +1046,15 @@ The cell values also become values in a new variable, with a name defined by `va
 A more challenging situation occurs when you have multiple pieces of information crammed into the column names, and you would like to store these in separate new variables. For example, take the `who` dataset, the source of `table1` and friends you saw above:
 
 ```{python}
-#| echo: false
-
 who2 = pl.read_csv("data/who2.csv", null_values="")
+who2
 ```
 
 ```{python}
 who2.glimpse()
 ```
 
-This dataset, collected by the World Health Organization, records information about tuberculosis diagnoses. There are two columns that are already variables and are easy to interpret: `country` and `year`. They are followed by 56 columns like `sp_m_014`, `ep_m_4554`, and `rel_m_3544`. If you stare at these columns for long enough, you’ll notice there’s a pattern. Each column name is made up of three pieces separated by `_`. The first piece, `sp`/`rel`/`ep`, describes the method used for the diagnosis, the second piece, `m`/`f` is the gender (coded as a binary variable in this dataset), and the third piece, `014`/`1524`/`2534`/`3544`/`4554`/`5564`/`65` is the age range (`014` represents 0-14, for example).
+This dataset, collected by the World Health Organization, records information about tuberculosis diagnoses. There are two columns that are already variables and are easy to interpret: `country` and `year`. They are followed by 56 columns like `sp_m_014`, `ep_m_4554`, and `rel_m_3544`. If you stare at these columns for long enough, you'll notice there's a pattern. Each column name is made up of three pieces separated by `_`. The first piece, `sp`/`rel`/`ep`, describes the method used for the diagnosis, the second piece, `m`/`f` is the gender (coded as a binary variable in this dataset), and the third piece, `014`/`1524`/`2534`/`3544`/`4554`/`5564`/`65` is the age range (`014` represents 0-14, for example).
 
 So in this case, we have six pieces of information recorded in `who2`: the country and the year (already columns); the method of diagnosis, the gender category, and the age range category (contained in the other column names); and the count of patients in that category (cell values). 
 
@@ -1157,26 +1138,22 @@ While the above steps break down the process to understand easier, here is a mor
 )
 ```
 
-Conceptually, this is only a minor variation on the simpler case you’ve already seen. The figure below shows the basic idea: now, instead of the column names pivoting into a single column, they pivot into multiple columns.
+Conceptually, this is only a minor variation on the simpler case you've already seen. The figure below shows the basic idea: now, instead of the column names pivoting into a single column, they pivot into multiple columns.
 
 ![Pivoting columns with multiple pieces of information in the names means that each column name now fills in values in multiple output columns.](images/unpivot-multiple-names.png)
 
 ### Widening data
 
-So far we've used `DataFrame.unpivot()` to solve the common class of problems where values have ended up in column names. Next we’ll pivot (HA HA) to `DataFrame.pivot()`, which makes datasets **wider** by increasing columns and reducing rows and helps when one observation is spread across multiple rows. This seems to arise less commonly in the wild, but it does seem to crop up a lot when dealing with governmental data.
+So far we've used `DataFrame.unpivot()` to solve the common class of problems where values have ended up in column names. Next we'll pivot (HA HA) to `DataFrame.pivot()`, which makes datasets **wider** by increasing columns and reducing rows and helps when one observation is spread across multiple rows. This seems to arise less commonly in the wild, but it does seem to crop up a lot when dealing with governmental data.
 
-We’ll start by looking at `cms_patient_experience`, a dataset from the Centers of Medicare and Medicaid services that collects data about patient experiences:
+We'll start by looking at `cms_patient_experience`, a dataset from the Centers of Medicare and Medicaid services that collects data about patient experiences:
 
 ```{python}
-#| echo: false
-
 cms_patient_experience = pl.read_csv(
     "data/cms_patient_experience.csv", 
     schema_overrides={"org_pac_id": pl.String}
 )
-```
 
-```{python}
 cms_patient_experience
 ```
 
@@ -1188,7 +1165,7 @@ cols = ["measure_cd", "measure_title"]
 cms_patient_experience.unique(subset=cols).select(cols).sort(cols)
 ```
 
-Neither of these columns will make particularly great variable names: `measure_cd` doesn’t hint at the meaning of the variable and `measure_title` is a long sentence containing spaces. We’ll use `measure_cd` as the source for our new column names for now, but in a real analysis you might want to create your own variable names that are both short and meaningful.
+Neither of these columns will make particularly great variable names: `measure_cd` doesn't hint at the meaning of the variable and `measure_title` is a long sentence containing spaces. We'll use `measure_cd` as the source for our new column names for now, but in a real analysis you might want to create your own variable names that are both short and meaningful.
 
 `DataFrame.pivot()` has a similar, but different, interface than `DataFrame.unpivot()`: you still select the `index` columns (the columns that remain), but now you select which column the `values` will come from, and which column the names come from (`on`).
 
@@ -1202,7 +1179,7 @@ cms_patient_experience.pivot(
 
 #### How does `DataFrame.pivot()` work?
 
-To understand how `DataFrame.pivot()` works, let’s again start with a very simple dataset. This time we have two patients with `id`s A and B, we have three blood pressure measurements on patient A and two on patient B:
+To understand how `DataFrame.pivot()` works, let's again start with a very simple dataset. This time we have two patients with `id`s A and B, we have three blood pressure measurements on patient A and two on patient B:
 
 ```{python}
 df = pl.from_dict({
@@ -1210,9 +1187,11 @@ df = pl.from_dict({
     "measurement": ["bp1", "bp1", "bp2", "bp2", "bp3"],
     "value": [100, 140, 115, 120, 105]
 })
+
+df
 ```
 
-We’ll take the values from the `value` column and the names from the `measurement` column:
+We'll take the values from the `value` column and the names from the `measurement` column:
 
 ```{python}
 df.pivot(on="measurement", values="value") # unused cols get put in `index`
@@ -1224,7 +1203,7 @@ To begin the process, `DataFrame.pivot()` needs to first figure out what will go
 df.select("measurement").unique()
 ```
 
-By default, the rows in the output are determined by all the variables that aren’t going into the new names or values. These are called the `index` columns. Here there is only one column, but in general there can be any number.
+By default, the rows in the output are determined by all the variables that aren't going into the new names or values. These are called the `index` columns. Here there is only one column, but in general there can be any number.
 
 ```{python}
 df.select(pl.exclude("measurement", "value")).unique()
@@ -1238,7 +1217,7 @@ df.select(pl.exclude("measurement", "value")).unique().with_columns(
 )
 ```
 
-It then fills in all the missing values using the data in the input. In this case, not every cell in the output has a corresponding value in the input as there’s no third blood pressure measurement for patient B, so that cell remains missing. 
+It then fills in all the missing values using the data in the input. In this case, not every cell in the output has a corresponding value in the input as there's no third blood pressure measurement for patient B, so that cell remains missing. 
 
 #### Data and variable names in the column headers
 
@@ -1289,9 +1268,9 @@ We use `DataFrame.drop_nulls()` since the shape of the input forces the creation
 
 ### Summary
 
-In this section, you learned about tidy data: data that has variables in columns and observations in rows. Tidy data makes working in the Polars easier, because it’s a consistent structure understood by most functions, the main challenge is transforming the data from whatever structure you receive it in to a tidy format. To that end, you learned about `DataFrame.unpivot()` and `DataFrame.pivot()` which allow you to tidy up many untidy datasets.
+In this section, you learned about tidy data: data that has variables in columns and observations in rows. Tidy data makes working in the Polars easier, because it's a consistent structure understood by most functions, the main challenge is transforming the data from whatever structure you receive it in to a tidy format. To that end, you learned about `DataFrame.unpivot()` and `DataFrame.pivot()` which allow you to tidy up many untidy datasets.
 
-Another challenge is that, for a given dataset, it can be impossible to label the longer or the wider version as the "tidy" one. This is partly a reflection of our definition of tidy data, where we said tidy data has one variable in each column, but we didn’t actually define what a variable is (and it’s surprisingly hard to do so). It’s totally fine to be pragmatic and to say a variable is whatever makes your analysis easiest. So if you’re stuck figuring out how to do some computation, consider switching up the organization of your data; don’t be afraid to untidy, transform, and re-tidy as needed!
+Another challenge is that, for a given dataset, it can be impossible to label the longer or the wider version as the "tidy" one. This is partly a reflection of our definition of tidy data, where we said tidy data has one variable in each column, but we didn't actually define what a variable is (and it's surprisingly hard to do so). It's totally fine to be pragmatic and to say a variable is whatever makes your analysis easiest. So if you're stuck figuring out how to do some computation, consider switching up the organization of your data; don't be afraid to untidy, transform, and re-tidy as needed!
 
 ## Data import & export
 
@@ -1300,7 +1279,6 @@ Working with data provided by Python packages is a great way to learn data scien
 Specifically, this chapter will focus on reading plain-text rectangular files. We'll start with practical advice for handling features like column names, types, and missing data. You will then learn about reading data from multiple files at once and writing data from Python to a file. Finally, you'll learn how to handcraft data frames in Python, and export them with Polars functions.
 
 ```{python}
-import polars as pl
 import io # we'll use this to "create" CSVs within Python examples
 ```
 
@@ -1645,14 +1623,13 @@ sales_files = [
 dfs = [pl.read_csv(file).with_columns(pl.lit(os.path.basename(file)).alias("file")) 
        for file in sales_files]
 sales = pl.concat(dfs)
-print(sales)
 ```
 
 ::: {.callout-tip}
-This method uses something called List Comprehension, which you can learn more about [here](https://www.w3schools.com/python/python_lists_comprehension.asp).
+This method uses something called List Comprehension, which you can learn more about [here](https://www.w3schools.com/python/python_lists_comprehension.asp). We won't need these techniques for this class, but you should be aware of them.
 :::
 
-You can download these files from the URLs mentioned in the original chapter, or read them directly:
+You can download these files from the URLs manually, or read them directly with Polars:
 
 ```python
 sales_files = [
@@ -1664,7 +1641,6 @@ sales_files = [
 dfs = [pl.read_csv(file).with_columns(pl.lit(file).alias("file")) 
        for file in sales_files]
 sales = pl.concat(dfs)
-print(sales)
 ```
 
 If you have many files you want to read in, you can use the `glob` module to find the files by matching a pattern:
@@ -1684,26 +1660,17 @@ Polars provides several functions for writing data to disk. The most common are 
 students.write_csv("students.csv")
 ```
 
-Now let's read that CSV file back in. Note that the variable type information you set up is lost when you save to CSV because you're starting over with reading from a plain text file. This makes CSVs somewhat unreliable for caching interim results—you need to recreate the column specification every time you load in. There are two better alternatives:
+Note that the variable type information you set up is lost when you save to CSV because you're starting over with reading from a plain text file. 
+This makes CSVs somewhat unreliable for caching interim results. You need to recreate the column specification every time you load in. 
 
-1.[Parquet files](https://www.databricks.com/glossary/what-is-parquet) maintain the column types and are generally faster and more space-efficient:
+There are two better alternative is [Parquet files](https://www.databricks.com/glossary/what-is-parquet). These maintain the column types and are generally faster and more space-efficient.
 
 ```python
 students.write_parquet("students.parquet")
 parquet_students = pl.read_parquet("students.parquet")
 ```
 
-2. For Python-specific caching, you can use the [pickle format](https://www.geeksforgeeks.org/understanding-python-pickling-example/) through libraries like `joblib`:
-
-```python
-import joblib
-
-joblib.dump(students, "students.joblib")
-joblib_students = joblib.load("students.joblib")
-print(joblib_students)
-```
-
-Parquet is usually preferable because it's cross-language compatible, more efficient, and maintains your data types.
+Parquet is becoming more common in use with data sciences, but they have not caught on with more business based analytical tools like Excel, Tableau, & Power BI, so CSVs still reign supreme.
 
 ### Data entry
 
@@ -1735,13 +1702,13 @@ df
 
 In this section, you've learned how to load CSV files with Polars' `pl.read_csv()` and how to do your own data entry by creating DataFrames from dictionaries and lists. You've learned how CSV files work, some of the problems you might encounter, and how to overcome them.
 
-We'll revisit data import in various formats throughout your Python data science journey, including Excel files, databases, Parquet files, JSON, and data from websites. 
+You'll revisit data import in various formats throughout your Python data science journey, including Excel files, databases, Parquet files, JSON, and data from websites. 
 
 Polars is an excellent choice for data handling, as it's designed to take advantage of modern hardware through parallel processing and memory efficiency. As you become more familiar with Python data science tools, you'll appreciate Polars' performance benefits and elegant API design.
 
 ## Exercises
 
-1. Does it matter what order you used `DataFrame.filter()` and `DataFrame.sort()` if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.
+1. Does it matter what order you used `DataFrame.filter()` and `DataFrame.sort()` if you're using both? Why/why not? Think about the results and how much work the functions would have to do.
 
 2. What happens if you specify the name of the same variable multiple times in a `DataFrame.select()` call?
 
@@ -1755,7 +1722,7 @@ Polars is an excellent choice for data handling, as it's designed to take advant
     - Flew to Houston (IAH or HOU)
     - Were operated by United, American, or Delta
     - Departed in summer (July, August, and September)
-    - Arrived more than two hours late but didn’t leave late
+    - Arrived more than two hours late but didn't leave late
     - Were delayed by at least an hour, but made up over 30 minutes in flight
 
 6. Find the flights that are most delayed upon departure from each destination.

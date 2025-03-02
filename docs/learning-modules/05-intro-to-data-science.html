@@ -325,7 +325,7 @@ Modules</span></a>
   </ul></li>
   <li><a href="#summary-2" id="toc-summary-2" class="nav-link" data-scroll-target="#summary-2"><span class="header-section-number">4.4</span> Summary</a></li>
   </ul></li>
-  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import"><span class="header-section-number">5</span> Data import</a>
+  <li><a href="#data-import-export" id="toc-data-import-export" class="nav-link" data-scroll-target="#data-import-export"><span class="header-section-number">5</span> Data import &amp; export</a>
   <ul>
   <li><a href="#reading-data-from-a-file" id="toc-reading-data-from-a-file" class="nav-link" data-scroll-target="#reading-data-from-a-file"><span class="header-section-number">5.1</span> Reading data from a file</a>
   <ul class="collapse">
@@ -342,13 +342,11 @@ Modules</span></a>
   </ul></li>
   <li><a href="#reading-data-from-multiple-files" id="toc-reading-data-from-multiple-files" class="nav-link" data-scroll-target="#reading-data-from-multiple-files"><span class="header-section-number">5.3</span> Reading data from multiple
   files</a></li>
+  <li><a href="#writing-to-a-file" id="toc-writing-to-a-file" class="nav-link" data-scroll-target="#writing-to-a-file"><span class="header-section-number">5.4</span> Writing to a file</a></li>
+  <li><a href="#data-entry" id="toc-data-entry" class="nav-link" data-scroll-target="#data-entry"><span class="header-section-number">5.5</span> Data entry</a></li>
+  <li><a href="#summary-3" id="toc-summary-3" class="nav-link" data-scroll-target="#summary-3"><span class="header-section-number">5.6</span> Summary</a></li>
   </ul></li>
-  <li><a href="#writing-to-a-file" id="toc-writing-to-a-file" class="nav-link" data-scroll-target="#writing-to-a-file"><span class="header-section-number">6</span> Writing to a file</a>
-  <ul>
-  <li><a href="#data-entry" id="toc-data-entry" class="nav-link" data-scroll-target="#data-entry"><span class="header-section-number">6.1</span> Data entry</a></li>
-  <li><a href="#summary-3" id="toc-summary-3" class="nav-link" data-scroll-target="#summary-3"><span class="header-section-number">6.2</span> Summary</a></li>
-  </ul></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">7</span> Exercises</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">6</span> Exercises</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="resources/Python_Polars_the_Definitive_Guide_-_Early_Release_6.pdf"><i class="bi bi-filetype-pdf"></i>Python Polars the Definitive Guide (Early Release)</a></li><li><a href="data/billboard.csv"><i class="bi bi-filetype-csv"></i>billboard.csv</a></li><li><a href="data/cms_patient_experience.csv"><i class="bi bi-filetype-csv"></i>cms_patient_experience.csv</a></li><li><a href="data/penguins.csv"><i class="bi bi-filetype-csv"></i>penguins.csv</a></li><li><a href="data/students.csv"><i class="bi bi-filetype-csv"></i>students.csv</a></li><li><a href="data/who2.csv"><i class="bi bi-filetype-csv"></i>who2.csv</a></li></ul></div></nav>
     </div>
@@ -479,12 +477,12 @@ penguin.</p>
 <p>We will use <code>palmerpenguins</code> package to get the
 <code>penguins</code> data, and convert it to a <code>polars</code> data
 frame:</p>
-<div id="a363fc64" class="cell" data-execution_count="3">
+<div id="3cd04746" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pl.from_pandas(palmerpenguins.load_penguins())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The reason we convert to a Polars data frame is because we want to
 use the tools and methods that come with Polars:</p>
-<div id="a716092a" class="cell" data-execution_count="4">
+<div id="0fc75eea" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>polars.dataframe.frame.DataFrame</code></pre>
@@ -494,7 +492,7 @@ use the tools and methods that come with Polars:</p>
 variable name (<code>penguins</code>) as the last line will print a
 formatted view of the data. If not, you can also use
 <code>print()</code> to use Polars’ native formatting:</p>
-<div id="d5f754a8" class="cell" data-execution_count="5">
+<div id="675bd93e" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>penguins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div><style>
@@ -624,7 +622,7 @@ formatted view of the data. If not, you can also use
 </div>
 </div>
 </div>
-<div id="9dcc502a" class="cell" data-execution_count="6">
+<div id="0fd4fafd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>shape: (344, 8)
@@ -649,7 +647,7 @@ formatted view of the data. If not, you can also use
 <p>This data frame contains 8 columns. For an alternative view, use
 <code>DataFrame.glimpse()</code>, which is helpful for wide tables that
 have many columns:</p>
-<div id="823aa83f" class="cell" data-execution_count="7">
+<div id="397039f0" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>penguins.glimpse()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 344
@@ -702,7 +700,7 @@ from the module, commonly referred to as <code>px</code>. You can then
 add arguments to your plot function for more customization.</p>
 <p>At it’s most basic form, the plotting function creates a <em>blank
 canvas</em> with a grid since we’ve given it no data.</p>
-<div id="8fd71d3d" class="cell" data-execution_count="9">
+<div id="7472ada5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>px.scatter()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_9.html" frameborder="0" allowfullscreen=""></iframe>
@@ -711,7 +709,7 @@ canvas</em> with a grid since we’ve given it no data.</p>
 <p>Next, we need to actually provide data, along with the appropriate
 number of variables depending on the type of plot we are trying to
 create.</p>
-<div id="f90f3951" class="cell" data-execution_count="10">
+<div id="6e3fe575" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>px.scatter(data_frame<span class="op">=</span>penguins, x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, y<span class="op">=</span><span class="st">"body_mass_g"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_10.html" frameborder="0" allowfullscreen=""></iframe>
@@ -748,7 +746,7 @@ relationship between these variables. We will do this by representing
 species with different colored points.</p>
 <p>To achieve this, we will use some of the other arguments that
 <code>px.scatter()</code> provides for us, like <code>color</code>:</p>
-<div id="104c7977" class="cell" data-execution_count="11">
+<div id="29e8d1d0" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    data_frame<span class="op">=</span>penguins, </span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, </span>
@@ -771,7 +769,7 @@ that modify its behavior. Specifically, we want to draw a line of best
 fit using Ordinary Least Squares (ols). You can see the other options,
 and more info about this plotting function with
 <code>?px.scatter()</code> or in the online documentation.</p>
-<div id="08c1b7dd" class="cell" data-execution_count="12">
+<div id="7e4f7631" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    data_frame<span class="op">=</span>penguins, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, </span>
@@ -793,7 +791,7 @@ is drawn when there are groups, in this case created when we used
 per color, symbol, facet, etc., and <code>"overall"</code>, which
 computes one trendline for the entire dataset,a nd replicates across all
 facets.</p>
-<div id="a0e07012" class="cell" data-execution_count="13">
+<div id="5ec069e1" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    data_frame<span class="op">=</span>penguins, </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, </span>
@@ -814,7 +812,7 @@ colors on a plot as people perceive colors differently do to color
 blindness or other color vision difference. <code>px.scatter()</code>
 allows us to control the shapes of the dots using the
 <code>symbol</code> argument.</p>
-<div id="5319d2e5" class="cell" data-execution_count="14">
+<div id="d51a941a" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    penguins,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>,</span>
@@ -838,7 +836,7 @@ for each of the labels on the plot that you would like to change. In our
 plot, we want to update the labels for the x-axis, y-axis, and the
 legend, but we refer to them by their current label, not their
 position:</p>
-<div id="47f4fe43" class="cell" data-execution_count="15">
+<div id="b788018b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    penguins,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>,</span>
@@ -877,7 +875,7 @@ small set of values. To examine the distribution of a categorical
 variable, you can use a <a href="https://plotly.com/python/bar-charts/">bar chart</a>. The height
 of the bars displays how many observations occurred with each
 <code>x</code> value.</p>
-<div id="47068b54" class="cell" data-execution_count="16">
+<div id="55ca7a2c" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>px.bar(penguins, x<span class="op">=</span><span class="st">"species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_16.html" frameborder="0" allowfullscreen=""></iframe>
@@ -888,7 +886,7 @@ row of input</strong>, which can result in the striped look above. To
 combine these rectangles into on color per position, we can
 pre-calculate the <strong>count</strong> as and use it as the
 <strong>y</strong> value:</p>
-<div id="09948203" class="cell" data-execution_count="17">
+<div id="05c4371c" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll learn more about this Polars code later</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>penguins_count <span class="op">=</span> penguins.group_by(<span class="st">"species"</span>).<span class="bu">len</span>(<span class="st">"count"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(penguins_count)</span>
@@ -918,7 +916,7 @@ based on their frequency, which we can do with the
 takes a dictionary where the keys correspond to column names, and the
 values should be lists of strings corresponding to the specific display
 order desired</p>
-<div id="841d8da9" class="cell" data-execution_count="18">
+<div id="284c5a2f" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>px.bar(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    penguins_count,</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"species"</span>, </span>
@@ -932,7 +930,7 @@ order desired</p>
 <p>While it’s easy enough to manually sort three columns, this could
 become very tedious for more columns. Here is one programmatic way you
 could sort the columns:</p>
-<div id="7c37c2e7" class="cell" data-execution_count="19">
+<div id="0e06f18d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>penguins_sorted <span class="op">=</span> (</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    penguins_count</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    .sort(by<span class="op">=</span><span class="st">"count"</span>, descending<span class="op">=</span><span class="va">True</span>)</span>
@@ -972,7 +970,7 @@ subtract, or take averages with those values. Numerical variables can be
 continuous or discrete.</p>
 <p>One common visualization for distributions of continuous variables is
 a <a href="https://plotly.com/python/histograms/">histogram</a>.</p>
-<div id="6ce7d30d" class="cell" data-execution_count="20">
+<div id="8a550802" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>px.histogram(penguins, x<span class="op">=</span><span class="st">"body_mass_g"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_20.html" frameborder="0" allowfullscreen=""></iframe>
@@ -994,19 +992,19 @@ number of 20 provides a sensible balance.</p>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>px.histogram(penguins, x<span class="op">=</span><span class="st">"body_mass_g"</span>, nbins<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-layout-panel" data-layout="[[1,1], [1]]">
 <div class="quarto-layout-row">
-<div id="11ede8dd" class="cell quarto-layout-cell" data-execution_count="21" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="51e7aad0" class="cell quarto-layout-cell" data-execution_count="21" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_21.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
-<div id="e164e8a5" class="cell quarto-layout-cell" data-execution_count="22" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="15b0f545" class="cell quarto-layout-cell" data-execution_count="22" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_22.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 </div>
 <div class="quarto-layout-row">
-<div id="650662d1" class="cell quarto-layout-cell" data-execution_count="23" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="8175ea96" class="cell quarto-layout-cell" data-execution_count="23" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_23.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
@@ -1021,7 +1019,7 @@ an underlying smooth distribution. At the time of writing, Plotly
 Express doesn’t have a quick way to create a density plot, but it does
 offer very customizable <a href="https://plotly.com/python/violin/">violin plots</a>, which we can
 make to look like a density plot if we would like.</p>
-<div id="921e1e49" class="cell" data-execution_count="24">
+<div id="ad3b786f" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>px.violin(penguins, x<span class="op">=</span><span class="st">"body_mass_g"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_24.html" frameborder="0" allowfullscreen=""></iframe>
@@ -1029,7 +1027,7 @@ make to look like a density plot if we would like.</p>
 </div>
 <p>The density plot is similar to the violin plot, with only one side,
 and the peaks are more exaggerated:</p>
-<div id="2c199d6b" class="cell" data-execution_count="25">
+<div id="ae97e15a" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>px.violin(</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    penguins, </span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"body_mass_g"</span>, <span class="co"># plots the variable across the x-axis</span></span>
@@ -1045,7 +1043,7 @@ and the peaks are more exaggerated:</p>
 <p>While this workaround works, sticking to the original violin plot I
 think looks better, and we can add some extra arguments to see more
 details:</p>
-<div id="2ecee8c3" class="cell" data-execution_count="26">
+<div id="6f85c05d" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>px.violin(penguins, x<span class="op">=</span><span class="st">"body_mass_g"</span>, points<span class="op">=</span><span class="st">"all"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_26.html" frameborder="0" allowfullscreen=""></iframe>
@@ -1098,14 +1096,14 @@ goes to the farthest non-outlier point in the distribution.</p></li>
 </div>
 <p>Let’s take a look at the distribution of body mass by species using
 <code>px.box()</code></p>
-<div id="d0212870" class="cell" data-execution_count="27">
+<div id="c213d3c0" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>px.box(penguins, x<span class="op">=</span><span class="st">"species"</span>, y<span class="op">=</span><span class="st">"body_mass_g"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_27.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Alternatively, we can make violin plots with multiple groups:</p>
-<div id="0c12bcfe" class="cell" data-execution_count="28">
+<div id="3d73d2f2" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>px.violin(penguins, x<span class="op">=</span><span class="st">"body_mass_g"</span>, color<span class="op">=</span><span class="st">"species"</span>, box<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_28.html" frameborder="0" allowfullscreen=""></iframe>
@@ -1126,14 +1124,14 @@ plots both display the relationship between <code>island</code> and
 each island. The plot of frequencies shows that there are equal numbers
 of Adelies on each island. But we don’t have a good sense of the
 percentage balance within each island.</p>
-<div id="892a8f17" class="cell" data-execution_count="29">
+<div id="ee30996e" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>px.bar(penguins, x<span class="op">=</span><span class="st">"island"</span>, color<span class="op">=</span><span class="st">"species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_29.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>or</p>
-<div id="2ab62f96" class="cell" data-execution_count="30">
+<div id="e1fb2c11" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> penguins.group_by([<span class="st">"island"</span>, <span class="st">"species"</span>]).<span class="bu">len</span>(<span class="st">"count"</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>data_order <span class="op">=</span> data.group_by(<span class="st">"island"</span>).agg(pl.col(<span class="st">"count"</span>).<span class="bu">sum</span>()).sort(by<span class="op">=</span><span class="st">"count"</span>, descending<span class="op">=</span><span class="va">True</span>).get_column(<span class="st">"island"</span>)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1154,7 +1152,7 @@ Two numerical variables</h4>
 between two numerical variables. A scatter plot is probably the most
 commonly used plot for visualizing the relationship between to numerical
 variables.</p>
-<div id="d4486848" class="cell" data-execution_count="31">
+<div id="9f249d6a" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>px.scatter(penguins, x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, y<span class="op">=</span><span class="st">"body_mass_g"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_31.html" frameborder="0" allowfullscreen=""></iframe>
@@ -1168,7 +1166,7 @@ Three or more variables</h4>
 mapping them to additional aesthetics. For example, in the following
 plot, the colors of points represent species and the shapes represent
 islands.</p>
-<div id="80e320dd" class="cell" data-execution_count="32">
+<div id="8d63d111" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    penguins, </span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, y<span class="op">=</span><span class="st">"body_mass_g"</span>,</span>
@@ -1185,7 +1183,7 @@ into <strong>facets</strong>, subplots that each display one subset of
 the data.</p>
 <p>Most Plotly Express functions provide arguments to facet, just make
 sure to check the documentation.</p>
-<div id="f11ba7a7" class="cell" data-execution_count="33">
+<div id="9d698d75" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>px.scatter(</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    penguins, </span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"flipper_length_mm"</span>, y<span class="op">=</span><span class="st">"body_mass_g"</span>,</span>
@@ -1238,7 +1236,7 @@ functions in action.</p>
 <code>flights</code> data frame from the <code>nycflights13</code>
 package. This dataset contains all 336,776 flights that departed from
 New York City in 2013.</p>
-<div id="42776bcc" class="cell" data-execution_count="34">
+<div id="b51ef991" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nycflights13</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1504,7 +1502,7 @@ methods, functions, etc., but in this course, we will be using Polars.
 Polars provides its own way of working with data frames, as well as
 importing, exporting, printing, and much more, including the previously
 shown <code>DataFrame.glimpse()</code> method:</p>
-<div id="4541d9a8" class="cell" data-execution_count="35">
+<div id="3f59dd09" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>flights.glimpse()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 336776
@@ -1553,7 +1551,7 @@ this is when we attach multiple methods together without creating a
 placeholder variable between steps. You can think of each <code>.</code>
 operator of saying “then”. This should help you get a sense of the
 following code without understanding the details:</p>
-<div id="06fbd7ca" class="cell" data-execution_count="36">
+<div id="7fa00073" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>flights.<span class="bu">filter</span>(</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"dest"</span>) <span class="op">==</span> <span class="st">"IAH"</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>).group_by(</span>
@@ -1588,27 +1586,27 @@ following code without understanding the details:</p>
 <tbody>
 <tr class="odd">
 <td>2013</td>
-<td>9</td>
-<td>16</td>
-<td>-8.9</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>2</td>
-<td>15</td>
-<td>9.2</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>1</td>
-<td>9</td>
-<td>18.055556</td>
-</tr>
-<tr class="even">
-<td>2013</td>
+<td>12</td>
 <td>10</td>
-<td>31</td>
-<td>16.761905</td>
+<td>60.352941</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>7</td>
+<td>27</td>
+<td>4.722222</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>11</td>
+<td>27</td>
+<td>-0.73913</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>9</td>
+<td>22</td>
+<td>-8.941176</td>
 </tr>
 <tr class="odd">
 <td>…</td>
@@ -1617,28 +1615,28 @@ following code without understanding the details:</p>
 <td>…</td>
 </tr>
 <tr class="even">
-<td>2013</td>
-<td>2</td>
-<td>22</td>
-<td>7.35</td>
-</tr>
-<tr class="odd">
 <td>2013</td>
 <td>8</td>
-<td>25</td>
-<td>-23.947368</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>2</td>
-<td>26</td>
-<td>-5.833333</td>
+<td>7</td>
+<td>-9.0</td>
 </tr>
 <tr class="odd">
 <td>2013</td>
+<td>2</td>
+<td>21</td>
+<td>21.6</td>
+</tr>
+<tr class="even">
+<td>2013</td>
 <td>4</td>
-<td>25</td>
-<td>53.5</td>
+<td>2</td>
+<td>11.272727</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>9</td>
+<td>12</td>
+<td>50.3125</td>
 </tr>
 </tbody>
 </table>
@@ -1656,7 +1654,7 @@ surrounded by parenthesis, the <code>.</code> operator does not have to
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If we didn’t use method chaining, we would have to create a bunch of
 intermediate objects:</p>
-<div id="af8e8ce7" class="cell" data-execution_count="37">
+<div id="a9f0f1cf" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>flights1 <span class="op">=</span> flights.<span class="bu">filter</span>(pl.col(<span class="st">"dest"</span>) <span class="op">==</span> <span class="st">"IAH"</span>)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>flights2 <span class="op">=</span> flights1.group_by([<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>])</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>flights3 <span class="op">=</span> flights2.agg(arr_delay<span class="op">=</span>pl.col(<span class="st">"arr_delay"</span>).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1688,7 +1686,7 @@ allows you to keep rows based on the values of the columns. The
 arguments (also known as predicates) are the conditions that must be
 true to keep the row. For example, we could find all flights that
 departed more than 120 minutes late:</p>
-<div id="0c4375a0" class="cell" data-execution_count="38">
+<div id="206feafd" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>flights.<span class="bu">filter</span>(pl.col(<span class="st">"dep_delay"</span>) <span class="op">&gt;</span> <span class="dv">120</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <div><style>
@@ -1946,7 +1944,7 @@ previous, as well as chain them with <code>&amp;</code> (instead of
 about ambiguity, so each condition we check for also has it’s own
 parenthesis, similar to what we might use in a calculator to make sure
 the order of operations is being followed exactly as we want:</p>
-<div id="c482b3e4" class="cell" data-execution_count="39">
+<div id="06431e29" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flights that departed on January 1</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>flights.<span class="bu">filter</span>(</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"month"</span>) <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (pl.col(<span class="st">"day"</span>) <span class="op">==</span> <span class="dv">1</span>)</span>
@@ -2200,7 +2198,7 @@ the order of operations is being followed exactly as we want:</p>
 </div>
 </div>
 </div>
-<div id="e8213ae0" class="cell" data-execution_count="40">
+<div id="d2e92021" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flights that departed in January or February</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>flights.<span class="bu">filter</span>(</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"month"</span>) <span class="op">==</span> <span class="dv">1</span>) <span class="op">|</span> (pl.col(<span class="st">"month"</span>) <span class="op">==</span> <span class="dv">2</span>)</span>
@@ -2457,7 +2455,7 @@ the order of operations is being followed exactly as we want:</p>
 <p>There’s a useful shortcut when you’re combining <code>|</code> and
 <code>==</code>: <code>Expr.is_in()</code>. It keeps rows where the
 variable equals one of the values on the right:</p>
-<div id="191e921e" class="cell" data-execution_count="41">
+<div id="72ea37e4" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A shorter way to select flights that departed in January or February</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>flights.<span class="bu">filter</span>(</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"month"</span>).is_in([<span class="dv">1</span>, <span class="dv">2</span>])</span>
@@ -2716,7 +2714,7 @@ filtering operation, creating a new DataFrame, and then prints it. It
 doesn’t modify the existing <code>flights</code> dataset because Polars
 never modifies the input (unless when explicitly chosen). To save the
 result, you need to use the assignment operator, <code>=</code>:</p>
-<div id="70d58668" class="cell" data-execution_count="42">
+<div id="db470e55" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>jan1 <span class="op">=</span> flights.<span class="bu">filter</span>((pl.col(<span class="st">"month"</span>) <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (pl.col(<span class="st">"day"</span>) <span class="op">==</span> <span class="dv">1</span>))</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>jan1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="42">
@@ -2980,7 +2978,7 @@ additional column will be used to break ties in the values of the
 preceding columns. For example, the following code sorts by the
 departure time, which is spread over four columns. We get the earliest
 years first, then within a year, the earliest months, etc.</p>
-<div id="b4178122" class="cell" data-execution_count="43">
+<div id="590247f0" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>flights.sort(by<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"dep_time"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 <div><style>
@@ -3233,7 +3231,7 @@ years first, then within a year, the earliest months, etc.</p>
 </div>
 <p>You can use positional arguments to sort by multiple columns in the
 same way:</p>
-<div id="5a783fd6" class="cell" data-execution_count="44">
+<div id="af0b7fbd" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>flights.sort(</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    by<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"dep_time"</span>],</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    descending<span class="op">=</span>[<span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>]</span>
@@ -3498,7 +3496,7 @@ finds all the unique rows in a dataset, so technically, it primarily
 operates on the rows. Most of the time, however, you’ll want the
 distinct combination of some variables, so you can also optionally
 supply column names:</p>
-<div id="7af2ca70" class="cell" data-execution_count="45">
+<div id="9276f338" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove duplicate rows, if any</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>flights.unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="45">
@@ -3558,199 +3556,199 @@ supply column names:</p>
 <tbody>
 <tr class="odd">
 <td>2013</td>
-<td>10</td>
-<td>19</td>
-<td>1939.0</td>
-<td>1930</td>
-<td>9.0</td>
-<td>2247.0</td>
-<td>2249</td>
-<td>-2.0</td>
-<td>"DL"</td>
-<td>795</td>
-<td>"N3765"</td>
-<td>"JFK"</td>
-<td>"SLC"</td>
-<td>270.0</td>
-<td>1990</td>
-<td>19</td>
-<td>30</td>
-<td>2013-10-19 23:00:00</td>
+<td>4</td>
+<td>22</td>
+<td>1151.0</td>
+<td>1200</td>
+<td>-9.0</td>
+<td>1513.0</td>
+<td>1510</td>
+<td>3.0</td>
+<td>"AA"</td>
+<td>977</td>
+<td>"N3FMAA"</td>
+<td>"EWR"</td>
+<td>"MIA"</td>
+<td>167.0</td>
+<td>1085</td>
+<td>12</td>
+<td>0</td>
+<td>2013-04-22 16:00:00</td>
 </tr>
 <tr class="even">
 <td>2013</td>
-<td>10</td>
-<td>8</td>
-<td>657.0</td>
-<td>700</td>
+<td>9</td>
+<td>11</td>
+<td>1622.0</td>
+<td>1625</td>
 <td>-3.0</td>
-<td>951.0</td>
-<td>1015</td>
-<td>-24.0</td>
-<td>"VX"</td>
-<td>399</td>
-<td>"N626VA"</td>
+<td>1805.0</td>
+<td>1743</td>
+<td>22.0</td>
+<td>"EV"</td>
+<td>4120</td>
+<td>"N13913"</td>
+<td>"EWR"</td>
+<td>"ROC"</td>
+<td>66.0</td>
+<td>246</td>
+<td>16</td>
+<td>25</td>
+<td>2013-09-11 20:00:00</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>1</td>
+<td>15</td>
+<td>1750.0</td>
+<td>1755</td>
+<td>-5.0</td>
+<td>2106.0</td>
+<td>2053</td>
+<td>13.0</td>
+<td>"B6"</td>
+<td>391</td>
+<td>"N561JB"</td>
+<td>"LGA"</td>
+<td>"MCO"</td>
+<td>147.0</td>
+<td>950</td>
+<td>17</td>
+<td>55</td>
+<td>2013-01-15 22:00:00</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>11</td>
+<td>20</td>
+<td>801.0</td>
+<td>810</td>
+<td>-9.0</td>
+<td>1057.0</td>
+<td>1116</td>
+<td>-19.0</td>
+<td>"DL"</td>
+<td>857</td>
+<td>"N3755D"</td>
+<td>"JFK"</td>
+<td>"SAN"</td>
+<td>337.0</td>
+<td>2446</td>
+<td>8</td>
+<td>10</td>
+<td>2013-11-20 13:00:00</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>9</td>
+<td>1</td>
+<td>1421.0</td>
+<td>1430</td>
+<td>-9.0</td>
+<td>1652.0</td>
+<td>1736</td>
+<td>-44.0</td>
+<td>"DL"</td>
+<td>1935</td>
+<td>"N361NW"</td>
+<td>"LGA"</td>
+<td>"TPA"</td>
+<td>136.0</td>
+<td>1010</td>
+<td>14</td>
+<td>30</td>
+<td>2013-09-01 18:00:00</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>4</td>
+<td>28</td>
+<td>1733.0</td>
+<td>1738</td>
+<td>-5.0</td>
+<td>1939.0</td>
+<td>1926</td>
+<td>13.0</td>
+<td>"B6"</td>
+<td>1185</td>
+<td>"N324JB"</td>
+<td>"JFK"</td>
+<td>"RDU"</td>
+<td>77.0</td>
+<td>427</td>
+<td>17</td>
+<td>38</td>
+<td>2013-04-28 21:00:00</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>1</td>
+<td>9</td>
+<td>1748.0</td>
+<td>1753</td>
+<td>-5.0</td>
+<td>2044.0</td>
+<td>2105</td>
+<td>-21.0</td>
+<td>"UA"</td>
+<td>535</td>
+<td>"N512UA"</td>
 <td>"JFK"</td>
 <td>"LAX"</td>
-<td>321.0</td>
-<td>2475</td>
-<td>7</td>
-<td>0</td>
-<td>2013-10-08 11:00:00</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>9</td>
-<td>28</td>
-<td>1019.0</td>
-<td>1020</td>
-<td>-1.0</td>
-<td>1258.0</td>
-<td>1309</td>
-<td>-11.0</td>
-<td>"B6"</td>
-<td>53</td>
-<td>"N571JB"</td>
-<td>"JFK"</td>
-<td>"PBI"</td>
-<td>122.0</td>
-<td>1028</td>
-<td>10</td>
-<td>20</td>
-<td>2013-09-28 14:00:00</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>12</td>
-<td>9</td>
-<td>1950.0</td>
-<td>1825</td>
-<td>85.0</td>
-<td>2325.0</td>
-<td>2152</td>
-<td>93.0</td>
-<td>"AS"</td>
-<td>5</td>
-<td>"N423AS"</td>
-<td>"EWR"</td>
-<td>"SEA"</td>
 <td>334.0</td>
-<td>2402</td>
-<td>18</td>
-<td>25</td>
-<td>2013-12-09 23:00:00</td>
-</tr>
-<tr class="odd">
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>1</td>
-<td>16</td>
-<td>941.0</td>
-<td>945</td>
-<td>-4.0</td>
-<td>1144.0</td>
-<td>1130</td>
-<td>14.0</td>
-<td>"AA"</td>
-<td>319</td>
-<td>"N4XFAA"</td>
-<td>"LGA"</td>
-<td>"ORD"</td>
-<td>132.0</td>
-<td>733</td>
-<td>9</td>
-<td>45</td>
-<td>2013-01-16 14:00:00</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>6</td>
-<td>14</td>
-<td>1650.0</td>
-<td>1635</td>
-<td>15.0</td>
-<td>1917.0</td>
-<td>1833</td>
-<td>44.0</td>
-<td>"EV"</td>
-<td>5615</td>
-<td>"N166PQ"</td>
-<td>"EWR"</td>
-<td>"DTW"</td>
-<td>96.0</td>
-<td>488</td>
-<td>16</td>
-<td>35</td>
-<td>2013-06-14 20:00:00</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>12</td>
-<td>1</td>
-<td>1945.0</td>
-<td>1945</td>
-<td>0.0</td>
-<td>2250.0</td>
-<td>2306</td>
-<td>-16.0</td>
-<td>"DL"</td>
-<td>1211</td>
-<td>"N359NB"</td>
-<td>"LGA"</td>
-<td>"RSW"</td>
-<td>155.0</td>
-<td>1080</td>
-<td>19</td>
-<td>45</td>
-<td>2013-12-02 00:00:00</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>3</td>
-<td>19</td>
-<td>2357.0</td>
-<td>2253</td>
-<td>64.0</td>
-<td>121.0</td>
-<td>14</td>
-<td>67.0</td>
-<td>"B6"</td>
-<td>112</td>
-<td>"N655JB"</td>
-<td>"JFK"</td>
-<td>"BUF"</td>
-<td>58.0</td>
-<td>301</td>
-<td>22</td>
+<td>2475</td>
+<td>17</td>
 <td>53</td>
-<td>2013-03-20 02:00:00</td>
+<td>2013-01-09 22:00:00</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>7</td>
+<td>10</td>
+<td>null</td>
+<td>1430</td>
+<td>null</td>
+<td>null</td>
+<td>1628</td>
+<td>null</td>
+<td>"EV"</td>
+<td>4572</td>
+<td>"N23139"</td>
+<td>"EWR"</td>
+<td>"GSP"</td>
+<td>null</td>
+<td>594</td>
+<td>14</td>
+<td>30</td>
+<td>2013-07-10 18:00:00</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div id="082f93cb" class="cell" data-execution_count="46">
+<div id="8a2648cb" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all unique origin and destination pairs</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>flights.unique(subset<span class="op">=</span>[<span class="st">"origin"</span>, <span class="st">"dest"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="46">
@@ -3810,89 +3808,89 @@ supply column names:</p>
 <tbody>
 <tr class="odd">
 <td>2013</td>
-<td>11</td>
-<td>24</td>
-<td>2026.0</td>
-<td>2035</td>
-<td>-9.0</td>
-<td>2227.0</td>
-<td>2249</td>
-<td>-22.0</td>
+<td>1</td>
+<td>3</td>
+<td>1923.0</td>
+<td>1815</td>
+<td>68.0</td>
+<td>2036.0</td>
+<td>1958</td>
+<td>38.0</td>
 <td>"9E"</td>
-<td>3669</td>
-<td>"N8604C"</td>
-<td>"LGA"</td>
-<td>"LEX"</td>
-<td>90.0</td>
-<td>604</td>
-<td>20</td>
-<td>35</td>
-<td>2013-11-25 01:00:00</td>
+<td>4019</td>
+<td>"N8836A"</td>
+<td>"JFK"</td>
+<td>"RIC"</td>
+<td>52.0</td>
+<td>288</td>
+<td>18</td>
+<td>15</td>
+<td>2013-01-03 23:00:00</td>
 </tr>
 <tr class="even">
 <td>2013</td>
 <td>1</td>
-<td>2</td>
-<td>905.0</td>
-<td>822</td>
-<td>43.0</td>
-<td>1313.0</td>
-<td>1045</td>
-<td>null</td>
+<td>1</td>
+<td>809.0</td>
+<td>815</td>
+<td>-6.0</td>
+<td>1043.0</td>
+<td>1050</td>
+<td>-7.0</td>
 <td>"EV"</td>
-<td>4140</td>
-<td>"N15912"</td>
+<td>4388</td>
+<td>"N14542"</td>
 <td>"EWR"</td>
-<td>"XNA"</td>
-<td>null</td>
-<td>1131</td>
+<td>"JAX"</td>
+<td>132.0</td>
+<td>820</td>
 <td>8</td>
-<td>22</td>
-<td>2013-01-02 13:00:00</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>1</td>
-<td>1</td>
-<td>2353.0</td>
-<td>2359</td>
-<td>-6.0</td>
-<td>425.0</td>
-<td>445</td>
-<td>-20.0</td>
-<td>"B6"</td>
-<td>739</td>
-<td>"N591JB"</td>
-<td>"JFK"</td>
-<td>"PSE"</td>
-<td>195.0</td>
-<td>1617</td>
-<td>23</td>
-<td>59</td>
-<td>2013-01-02 04:00:00</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>1</td>
-<td>1</td>
-<td>800.0</td>
-<td>810</td>
-<td>-10.0</td>
-<td>949.0</td>
-<td>955</td>
-<td>-6.0</td>
-<td>"MQ"</td>
-<td>4406</td>
-<td>"N828MQ"</td>
-<td>"JFK"</td>
-<td>"RDU"</td>
-<td>80.0</td>
-<td>427</td>
-<td>8</td>
-<td>10</td>
+<td>15</td>
 <td>2013-01-01 13:00:00</td>
 </tr>
 <tr class="odd">
+<td>2013</td>
+<td>1</td>
+<td>1</td>
+<td>544.0</td>
+<td>545</td>
+<td>-1.0</td>
+<td>1004.0</td>
+<td>1022</td>
+<td>-18.0</td>
+<td>"B6"</td>
+<td>725</td>
+<td>"N804JB"</td>
+<td>"JFK"</td>
+<td>"BQN"</td>
+<td>183.0</td>
+<td>1576</td>
+<td>5</td>
+<td>45</td>
+<td>2013-01-01 10:00:00</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>12</td>
+<td>21</td>
+<td>1610.0</td>
+<td>1610</td>
+<td>0.0</td>
+<td>1839.0</td>
+<td>1855</td>
+<td>-16.0</td>
+<td>"9E"</td>
+<td>2941</td>
+<td>"N8930E"</td>
+<td>"JFK"</td>
+<td>"SDF"</td>
+<td>114.0</td>
+<td>662</td>
+<td>16</td>
+<td>10</td>
+<td>2013-12-21 21:00:00</td>
+</tr>
+<tr class="odd">
 <td>…</td>
 <td>…</td>
 <td>…</td>
@@ -3916,86 +3914,86 @@ supply column names:</p>
 <tr class="even">
 <td>2013</td>
 <td>1</td>
-<td>5</td>
-<td>829.0</td>
-<td>830</td>
-<td>-1.0</td>
-<td>1047.0</td>
-<td>1111</td>
-<td>-24.0</td>
-<td>"UA"</td>
-<td>441</td>
-<td>"N847UA"</td>
-<td>"EWR"</td>
-<td>"HDN"</td>
-<td>243.0</td>
-<td>1728</td>
-<td>8</td>
-<td>30</td>
-<td>2013-01-05 13:00:00</td>
+<td>1</td>
+<td>741.0</td>
+<td>745</td>
+<td>-4.0</td>
+<td>1038.0</td>
+<td>1036</td>
+<td>2.0</td>
+<td>"B6"</td>
+<td>983</td>
+<td>"N633JB"</td>
+<td>"LGA"</td>
+<td>"TPA"</td>
+<td>158.0</td>
+<td>1010</td>
+<td>7</td>
+<td>45</td>
+<td>2013-01-01 12:00:00</td>
 </tr>
 <tr class="odd">
 <td>2013</td>
-<td>10</td>
 <td>1</td>
-<td>1930.0</td>
-<td>1900</td>
-<td>30.0</td>
-<td>2129.0</td>
-<td>2119</td>
-<td>10.0</td>
-<td>"9E"</td>
-<td>3854</td>
-<td>"N8884E"</td>
-<td>"LGA"</td>
-<td>"GSP"</td>
-<td>86.0</td>
-<td>610</td>
-<td>19</td>
-<td>0</td>
-<td>2013-10-01 23:00:00</td>
+<td>1</td>
+<td>1534.0</td>
+<td>1530</td>
+<td>4.0</td>
+<td>1755.0</td>
+<td>1735</td>
+<td>20.0</td>
+<td>"EV"</td>
+<td>4093</td>
+<td>"N17115"</td>
+<td>"EWR"</td>
+<td>"GRR"</td>
+<td>120.0</td>
+<td>605</td>
+<td>15</td>
+<td>30</td>
+<td>2013-01-01 20:00:00</td>
 </tr>
 <tr class="even">
 <td>2013</td>
 <td>1</td>
 <td>1</td>
-<td>558.0</td>
-<td>600</td>
-<td>-2.0</td>
-<td>753.0</td>
-<td>745</td>
-<td>8.0</td>
-<td>"AA"</td>
-<td>301</td>
-<td>"N3ALAA"</td>
-<td>"LGA"</td>
-<td>"ORD"</td>
-<td>138.0</td>
-<td>733</td>
+<td>615.0</td>
+<td>615</td>
+<td>0.0</td>
+<td>833.0</td>
+<td>842</td>
+<td>-9.0</td>
+<td>"DL"</td>
+<td>575</td>
+<td>"N326NB"</td>
+<td>"EWR"</td>
+<td>"ATL"</td>
+<td>120.0</td>
+<td>746</td>
 <td>6</td>
-<td>0</td>
+<td>15</td>
 <td>2013-01-01 11:00:00</td>
 </tr>
 <tr class="odd">
 <td>2013</td>
-<td>10</td>
 <td>1</td>
-<td>1955.0</td>
-<td>2001</td>
-<td>-6.0</td>
-<td>2213.0</td>
-<td>2248</td>
-<td>-35.0</td>
-<td>"B6"</td>
-<td>65</td>
-<td>"N554JB"</td>
-<td>"JFK"</td>
-<td>"ABQ"</td>
-<td>230.0</td>
-<td>1826</td>
-<td>20</td>
-<td>1</td>
-<td>2013-10-02 00:00:00</td>
+<td>5</td>
+<td>850.0</td>
+<td>825</td>
+<td>25.0</td>
+<td>1132.0</td>
+<td>1123</td>
+<td>9.0</td>
+<td>"UA"</td>
+<td>336</td>
+<td>"N457UA"</td>
+<td>"EWR"</td>
+<td>"BZN"</td>
+<td>260.0</td>
+<td>1882</td>
+<td>8</td>
+<td>25</td>
+<td>2013-01-05 13:00:00</td>
 </tr>
 </tbody>
 </table>
@@ -4027,7 +4025,7 @@ large set of functions that you can use to manipulate different types of
 variables. For new, we’ll stick with basic algebra, which allows us to
 compute the <code>gain</code>, how much time a delayed flight made up in
 the air, and the <code>speed</code> in miles per hour:</p>
-<div id="2f0c5599" class="cell" data-execution_count="47">
+<div id="e5a915f3" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>flights.with_columns(</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    gain <span class="op">=</span> pl.col(<span class="st">"dep_delay"</span>) <span class="op">-</span> pl.col(<span class="st">"arr_delay"</span>),</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    speed <span class="op">=</span> pl.col(<span class="st">"distance"</span>) <span class="op">/</span> pl.col(<span class="st">"air_time"</span>) <span class="op">*</span> <span class="dv">60</span></span>
@@ -4325,7 +4323,7 @@ on the names of the variables:</p>
 <ul>
 <li>Select columns by name:</li>
 </ul>
-<div id="e77858c4" class="cell" data-execution_count="48">
+<div id="94776318" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>flights.select(<span class="st">"year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="48">
 <div><style>
@@ -4381,7 +4379,7 @@ on the names of the variables:</p>
 <ul>
 <li>Select multiple columns by passing a list of column names:</li>
 </ul>
-<div id="43e81ed4" class="cell" data-execution_count="49">
+<div id="e088a8c3" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>flights.select([<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="49">
 <div><style>
@@ -4460,7 +4458,7 @@ on the names of the variables:</p>
 <li>Multiple columns can also be selected using positional arguments
 instead of a list. Expressions are also accepted:</li>
 </ul>
-<div id="2143cc28" class="cell" data-execution_count="50">
+<div id="ba9caa13" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>flights.select(</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"year"</span>),</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"month"</span>),</span>
@@ -4548,7 +4546,7 @@ the selected columns.</p>
 <p>Selectors are available as functions imported from
 <code>polars.selectors</code>. Typical/recommended usage is to import
 the module as <code>cs</code> and employ selectors from there.</p>
-<div id="f7b25fb6" class="cell" data-execution_count="51">
+<div id="f969e927" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars.selectors <span class="im">as</span> cs</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -4602,7 +4600,7 @@ operations:</p>
 </tr>
 </tbody>
 </table>
-<div id="814e31b8" class="cell" data-execution_count="52">
+<div id="dea2cf80" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>flights.select(cs.temporal() <span class="op">|</span> cs.string())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="52">
 <div><style>
@@ -4718,10 +4716,10 @@ contexts.</p>
 <code>DataFrame.group_by()</code></h4>
 <p>Use <a href="https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.group_by.html"><code>DataFrame.group_by()</code></a>
 to divide your dataset into groups meaningful for your analysis:</p>
-<div id="a5d033ec" class="cell" data-execution_count="53">
+<div id="15f88292" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>flights.group_by(<span class="st">"month"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
-<pre><code>&lt;polars.dataframe.group_by.GroupBy at 0x168ba4bdbb0&gt;</code></pre>
+<pre><code>&lt;polars.dataframe.group_by.GroupBy at 0x223b6fd93d0&gt;</code></pre>
 </div>
 </div>
 <p>As you can see, <code>DataFrame.group_by()</code> doesn’t change the
@@ -4739,7 +4737,7 @@ frame to have a single row for each group. In Polars, this operation is
 performed by <a href="https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.dataframe.group_by.GroupBy.agg.html"><code>GroupBy.agg()</code></a>,
 as shown by the following example, which computes the average departure
 delay by month:</p>
-<div id="1190b3a8" class="cell" data-execution_count="54">
+<div id="c74ddca6" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    flights</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    .group_by(<span class="st">"month"</span>)</span>
@@ -4767,40 +4765,40 @@ delay by month:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>5</td>
-<td>12.986859</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td>6.243988</td>
-</tr>
-<tr class="odd">
-<td>12</td>
-<td>16.576688</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>20.846332</td>
-</tr>
-<tr class="odd">
-<td>…</td>
-<td>…</td>
+<td>3</td>
+<td>13.227076</td>
 </tr>
 <tr class="even">
 <td>7</td>
 <td>21.727787</td>
 </tr>
 <tr class="odd">
-<td>4</td>
-<td>13.938038</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td>12.61104</td>
-</tr>
-<tr class="odd">
 <td>9</td>
 <td>6.722476</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>5.435362</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>16.576688</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>12.986859</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>10.036665</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>6.243988</td>
 </tr>
 </tbody>
 </table>
@@ -4820,7 +4818,7 @@ etc.)</li>
 <code>GroupBy.agg()</code>. You’ll learn various useful summaries in
 later modules, but one very useful summary is <code>pl.len()</code>,
 which returns the number of rows in each group:</p>
-<div id="8ff19c32" class="cell" data-execution_count="55">
+<div id="3f418637" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    flights</span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    .group_by(<span class="st">"month"</span>)</span>
@@ -4919,7 +4917,7 @@ group. (Also works with <code>DataFrame</code>)</li>
 </ul>
 <p><code>GroupBy</code> also provides some powerful aggregations for
 whole groups, like:</p>
-<div id="cdd63e38" class="cell" data-execution_count="56">
+<div id="d9993a1c" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>flights.group_by(<span class="st">"dest"</span>).<span class="bu">max</span>() <span class="co"># shows max value for each group and column</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>flights.group_by(<span class="st">"dest"</span>).<span class="bu">min</span>() <span class="co"># shows min value for each group and column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="56">
@@ -4978,85 +4976,85 @@ whole groups, like:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>"BHM"</td>
+<td>"TYS"</td>
 <td>2013</td>
 <td>1</td>
 <td>1</td>
-<td>25.0</td>
-<td>1000</td>
-<td>-13.0</td>
-<td>2.0</td>
-<td>1148</td>
-<td>-50.0</td>
-<td>"EV"</td>
-<td>4872</td>
-<td>"N137EV"</td>
-<td>"JFK"</td>
-<td>105.0</td>
-<td>865</td>
-<td>10</td>
+<td>1.0</td>
+<td>959</td>
+<td>-25.0</td>
+<td>1.0</td>
+<td>1228</td>
+<td>-51.0</td>
+<td>"9E"</td>
+<td>3518</td>
+<td>"N10575"</td>
+<td>"EWR"</td>
+<td>80.0</td>
+<td>631</td>
+<td>9</td>
 <td>0</td>
-<td>2013-01-03 01:00:00</td>
+<td>2013-01-02 00:00:00</td>
 </tr>
 <tr class="even">
-<td>"ANC"</td>
+<td>"STL"</td>
 <td>2013</td>
-<td>7</td>
-<td>3</td>
-<td>1613.0</td>
-<td>1615</td>
-<td>-2.0</td>
-<td>1906.0</td>
-<td>1953</td>
-<td>-47.0</td>
-<td>"UA"</td>
-<td>887</td>
-<td>"N528UA"</td>
-<td>"EWR"</td>
-<td>388.0</td>
-<td>3370</td>
+<td>1</td>
+<td>1</td>
+<td>37.0</td>
+<td>600</td>
+<td>-24.0</td>
+<td>1.0</td>
+<td>735</td>
+<td>-51.0</td>
+<td>"AA"</td>
 <td>16</td>
-<td>15</td>
-<td>2013-07-06 20:00:00</td>
+<td>"N0EGMQ"</td>
+<td>"EWR"</td>
+<td>110.0</td>
+<td>872</td>
+<td>6</td>
+<td>0</td>
+<td>2013-01-01 13:00:00</td>
 </tr>
 <tr class="odd">
-<td>"PDX"</td>
+<td>"BGR"</td>
+<td>2013</td>
+<td>3</td>
+<td>1</td>
+<td>8.0</td>
+<td>1056</td>
+<td>-16.0</td>
+<td>1.0</td>
+<td>1228</td>
+<td>-43.0</td>
+<td>"9E"</td>
+<td>3418</td>
+<td>"N135EV"</td>
+<td>"LGA"</td>
+<td>46.0</td>
+<td>378</td>
+<td>10</td>
+<td>0</td>
+<td>2013-03-02 16:00:00</td>
+</tr>
+<tr class="even">
+<td>"CLE"</td>
 <td>2013</td>
 <td>1</td>
 <td>1</td>
 <td>22.0</td>
-<td>659</td>
-<td>-12.0</td>
+<td>600</td>
+<td>-23.0</td>
 <td>1.0</td>
-<td>5</td>
-<td>-71.0</td>
-<td>"B6"</td>
-<td>96</td>
-<td>"N11206"</td>
-<td>"EWR"</td>
-<td>283.0</td>
-<td>2434</td>
-<td>6</td>
-<td>0</td>
-<td>2013-01-01 22:00:00</td>
-</tr>
-<tr class="even">
-<td>"PIT"</td>
-<td>2013</td>
-<td>1</td>
-<td>1</td>
-<td>17.0</td>
-<td>610</td>
-<td>-16.0</td>
-<td>10.0</td>
-<td>737</td>
-<td>-53.0</td>
+<td>743</td>
+<td>-55.0</td>
 <td>"9E"</td>
-<td>462</td>
-<td>"N10156"</td>
+<td>17</td>
+<td>"N0EGMQ"</td>
 <td>"EWR"</td>
-<td>40.0</td>
-<td>319</td>
+<td>54.0</td>
+<td>404</td>
 <td>6</td>
 <td>0</td>
 <td>2013-01-01 13:00:00</td>
@@ -5104,67 +5102,67 @@ whole groups, like:</p>
 <td>2013-01-01 13:00:00</td>
 </tr>
 <tr class="odd">
-<td>"CHS"</td>
+<td>"MDW"</td>
 <td>2013</td>
 <td>1</td>
 <td>1</td>
-<td>32.0</td>
-<td>659</td>
-<td>-17.0</td>
 <td>1.0</td>
-<td>904</td>
-<td>-50.0</td>
-<td>"9E"</td>
-<td>1273</td>
-<td>"N10156"</td>
+<td>600</td>
+<td>-13.0</td>
+<td>1.0</td>
+<td>715</td>
+<td>-49.0</td>
+<td>"WN"</td>
+<td>1</td>
+<td>"N200WN"</td>
 <td>"EWR"</td>
-<td>75.0</td>
-<td>628</td>
+<td>92.0</td>
+<td>711</td>
 <td>6</td>
 <td>0</td>
 <td>2013-01-01 13:00:00</td>
 </tr>
 <tr class="even">
-<td>"ROC"</td>
+<td>"DFW"</td>
 <td>2013</td>
 <td>1</td>
 <td>1</td>
+<td>16.0</td>
+<td>600</td>
+<td>-19.0</td>
 <td>1.0</td>
-<td>735</td>
-<td>-21.0</td>
-<td>1.0</td>
-<td>1</td>
-<td>-52.0</td>
+<td>830</td>
+<td>-68.0</td>
 <td>"9E"</td>
-<td>20</td>
-<td>"N10156"</td>
+<td>16</td>
+<td>"N11206"</td>
 <td>"EWR"</td>
-<td>35.0</td>
-<td>246</td>
+<td>158.0</td>
+<td>1372</td>
+<td>6</td>
+<td>0</td>
+<td>2013-01-01 11:00:00</td>
+</tr>
+<tr class="odd">
+<td>"SRQ"</td>
+<td>2013</td>
+<td>1</td>
+<td>1</td>
+<td>725.0</td>
+<td>735</td>
+<td>-17.0</td>
+<td>957.0</td>
+<td>1030</td>
+<td>-57.0</td>
+<td>"9E"</td>
+<td>163</td>
+<td>"N178JB"</td>
+<td>"JFK"</td>
+<td>124.0</td>
+<td>1041</td>
 <td>7</td>
 <td>0</td>
 <td>2013-01-01 12:00:00</td>
-</tr>
-<tr class="odd">
-<td>"PWM"</td>
-<td>2013</td>
-<td>1</td>
-<td>1</td>
-<td>1.0</td>
-<td>742</td>
-<td>-22.0</td>
-<td>1.0</td>
-<td>1</td>
-<td>-47.0</td>
-<td>"B6"</td>
-<td>8</td>
-<td>"N10156"</td>
-<td>"EWR"</td>
-<td>38.0</td>
-<td>269</td>
-<td>7</td>
-<td>0</td>
-<td>2013-01-01 14:00:00</td>
 </tr>
 </tbody>
 </table>
@@ -5174,7 +5172,7 @@ whole groups, like:</p>
 <p>If you want the top/bottom <code>k</code> number of rows (optionally
 by group), use the <code>DataFrame.top_k</code> or
 <code>DataFrame.bottom_k</code> contexts:</p>
-<div id="050416d9" class="cell" data-execution_count="57">
+<div id="aa04f02b" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>flights.top_k(k <span class="op">=</span> <span class="dv">4</span>, by <span class="op">=</span> <span class="st">"arr_delay"</span>)</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>flights.bottom_k(k <span class="op">=</span> <span class="dv">4</span>, by <span class="op">=</span> <span class="st">"arr_delay"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="57">
@@ -5327,7 +5325,7 @@ by group), use the <code>DataFrame.top_k</code> or
 Grouping by multiple variables</h4>
 <p>You can create groups using more than one variable. For example, we
 could make a group for each date:</p>
-<div id="2f6cdba2" class="cell" data-execution_count="58">
+<div id="f96562cd" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> (</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>    flights</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    .group_by([<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>])</span>
@@ -5391,87 +5389,87 @@ could make a group for each date:</p>
 <tbody>
 <tr class="odd">
 <td>2013</td>
-<td>9</td>
-<td>13</td>
-<td>2352.0</td>
-<td>2359</td>
-<td>245.0</td>
-<td>2359.0</td>
-<td>2359</td>
-<td>236.0</td>
-<td>"YV"</td>
-<td>6177</td>
-<td>"N9EAMQ"</td>
-<td>"LGA"</td>
-<td>"XNA"</td>
-<td>605.0</td>
-<td>4983</td>
-<td>23</td>
-<td>59</td>
-<td>2013-09-14 03:00:00</td>
-</tr>
-<tr class="even">
-<td>2013</td>
 <td>12</td>
-<td>9</td>
-<td>2400.0</td>
+<td>25</td>
+<td>2357.0</td>
 <td>2359</td>
-<td>368.0</td>
-<td>2400.0</td>
+<td>321.0</td>
+<td>2357.0</td>
 <td>2359</td>
-<td>376.0</td>
-<td>"YV"</td>
+<td>292.0</td>
+<td>"WN"</td>
 <td>6177</td>
-<td>"N9EAMQ"</td>
-<td>"LGA"</td>
-<td>"XNA"</td>
-<td>634.0</td>
-<td>4983</td>
-<td>23</td>
-<td>59</td>
-<td>2013-12-10 04:00:00</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>11</td>
-<td>14</td>
-<td>2359.0</td>
-<td>2359</td>
-<td>222.0</td>
-<td>2400.0</td>
-<td>2359</td>
-<td>192.0</td>
-<td>"YV"</td>
-<td>6181</td>
 <td>"N997DL"</td>
 <td>"LGA"</td>
 <td>"XNA"</td>
-<td>618.0</td>
-<td>4963</td>
+<td>619.0</td>
+<td>4983</td>
 <td>23</td>
 <td>59</td>
-<td>2013-11-15 04:00:00</td>
+<td>2013-12-26 04:00:00</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>2</td>
+<td>14</td>
+<td>2358.0</td>
+<td>2359</td>
+<td>327.0</td>
+<td>2400.0</td>
+<td>2358</td>
+<td>295.0</td>
+<td>"YV"</td>
+<td>5873</td>
+<td>"N998AT"</td>
+<td>"LGA"</td>
+<td>"XNA"</td>
+<td>632.0</td>
+<td>4983</td>
+<td>23</td>
+<td>59</td>
+<td>2013-02-15 04:00:00</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>5</td>
+<td>27</td>
+<td>2358.0</td>
+<td>2359</td>
+<td>278.0</td>
+<td>2358.0</td>
+<td>2359</td>
+<td>262.0</td>
+<td>"YV"</td>
+<td>5769</td>
+<td>"N999DN"</td>
+<td>"LGA"</td>
+<td>"XNA"</td>
+<td>611.0</td>
+<td>4983</td>
+<td>23</td>
+<td>59</td>
+<td>2013-05-28 03:00:00</td>
 </tr>
 <tr class="even">
 <td>2013</td>
 <td>3</td>
-<td>13</td>
+<td>28</td>
 <td>2355.0</td>
 <td>2359</td>
-<td>237.0</td>
-<td>2359.0</td>
+<td>242.0</td>
+<td>2356.0</td>
 <td>2359</td>
-<td>240.0</td>
-<td>"WN"</td>
-<td>5766</td>
-<td>"N998DL"</td>
+<td>226.0</td>
+<td>"YV"</td>
+<td>6180</td>
+<td>"N9EAMQ"</td>
 <td>"LGA"</td>
 <td>"XNA"</td>
-<td>641.0</td>
+<td>629.0</td>
 <td>4983</td>
 <td>23</td>
 <td>59</td>
-<td>2013-03-14 03:00:00</td>
+<td>2013-03-29 03:00:00</td>
 </tr>
 <tr class="odd">
 <td>…</td>
@@ -5493,90 +5491,90 @@ could make a group for each date:</p>
 <td>…</td>
 <td>…</td>
 <td>…</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>7</td>
+<td>15</td>
+<td>2357.0</td>
+<td>2359</td>
+<td>236.0</td>
+<td>2400.0</td>
+<td>2359</td>
+<td>236.0</td>
+<td>"YV"</td>
+<td>6177</td>
+<td>"N991DL"</td>
+<td>"LGA"</td>
+<td>"XNA"</td>
+<td>598.0</td>
+<td>4983</td>
+<td>23</td>
+<td>59</td>
+<td>2013-07-16 03:00:00</td>
+</tr>
+<tr class="odd">
+<td>2013</td>
+<td>1</td>
+<td>24</td>
+<td>2350.0</td>
+<td>2359</td>
+<td>329.0</td>
+<td>2359.0</td>
+<td>2359</td>
+<td>340.0</td>
+<td>"YV"</td>
+<td>6055</td>
+<td>"N993AT"</td>
+<td>"LGA"</td>
+<td>"XNA"</td>
+<td>657.0</td>
+<td>4983</td>
+<td>23</td>
+<td>59</td>
+<td>2013-01-25 04:00:00</td>
 </tr>
 <tr class="even">
 <td>2013</td>
 <td>12</td>
-<td>16</td>
-<td>2332.0</td>
-<td>2359</td>
-<td>305.0</td>
+<td>30</td>
 <td>2356.0</td>
 <td>2359</td>
-<td>302.0</td>
+<td>292.0</td>
+<td>2400.0</td>
+<td>2359</td>
+<td>283.0</td>
 <td>"YV"</td>
-<td>6177</td>
-<td>"N990DL"</td>
+<td>6181</td>
+<td>"N994AT"</td>
 <td>"LGA"</td>
 <td>"XNA"</td>
-<td>630.0</td>
+<td>644.0</td>
 <td>4983</td>
 <td>23</td>
 <td>59</td>
-<td>2013-12-17 04:00:00</td>
+<td>2013-12-31 04:00:00</td>
 </tr>
 <tr class="odd">
 <td>2013</td>
-<td>8</td>
-<td>10</td>
-<td>2400.0</td>
-<td>2359</td>
-<td>244.0</td>
-<td>2359.0</td>
-<td>2359</td>
-<td>255.0</td>
-<td>"WN"</td>
-<td>6177</td>
-<td>"N9EAMQ"</td>
-<td>"LGA"</td>
-<td>"TVC"</td>
-<td>635.0</td>
-<td>4983</td>
-<td>23</td>
-<td>59</td>
-<td>2013-08-11 03:00:00</td>
-</tr>
-<tr class="even">
-<td>2013</td>
-<td>9</td>
-<td>14</td>
-<td>2349.0</td>
-<td>2359</td>
-<td>164.0</td>
+<td>12</td>
+<td>1</td>
 <td>2354.0</td>
 <td>2359</td>
-<td>161.0</td>
+<td>687.0</td>
+<td>2359.0</td>
+<td>2359</td>
+<td>681.0</td>
 <td>"YV"</td>
-<td>6054</td>
+<td>6181</td>
 <td>"N9EAMQ"</td>
 <td>"LGA"</td>
-<td>"TPA"</td>
-<td>607.0</td>
-<td>4983</td>
-<td>23</td>
-<td>59</td>
-<td>2013-09-15 03:00:00</td>
-</tr>
-<tr class="odd">
-<td>2013</td>
-<td>8</td>
-<td>29</td>
-<td>2357.0</td>
-<td>2359</td>
-<td>340.0</td>
-<td>2400.0</td>
-<td>2359</td>
-<td>276.0</td>
-<td>"YV"</td>
-<td>6101</td>
-<td>"N997AT"</td>
-<td>"LGA"</td>
 <td>"XNA"</td>
-<td>613.0</td>
+<td>625.0</td>
 <td>4983</td>
 <td>23</td>
 <td>59</td>
-<td>2013-08-30 03:00:00</td>
+<td>2013-12-02 04:00:00</td>
 </tr>
 </tbody>
 </table>
@@ -5616,7 +5614,7 @@ to spend more time on the data questions you care about.</p>
 a simple toy dataset. Then we’ll dive into the primary tool you’ll use
 for tidying data: pivoting. Pivoting allows you to change the form of
 your data without changing any of the values.</p>
-<div id="8e52cf20" class="cell" data-execution_count="59">
+<div id="893bc663" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars.selectors <span class="im">as</span> cs</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -5630,7 +5628,7 @@ Each dataset shows the same values of four variables:
 <code>country</code>, <code>year</code>, <code>population</code>, and
 number of documented <code>cases</code> of TB (tuberculosis), but each
 dataset organizes the values in a different way.</p>
-<div id="33f1e1b9" class="cell" data-execution_count="61">
+<div id="f6eebcd9" class="cell" data-execution_count="61">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>table1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="61">
 <div><style>
@@ -5698,7 +5696,7 @@ dataset organizes the values in a different way.</p>
 </div>
 </div>
 </div>
-<div id="905ab24c" class="cell" data-execution_count="62">
+<div id="31fe10ef" class="cell" data-execution_count="62">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="62">
 <div><style>
@@ -5784,7 +5782,7 @@ dataset organizes the values in a different way.</p>
 </div>
 </div>
 </div>
-<div id="262f5145" class="cell" data-execution_count="63">
+<div id="13bc7594" class="cell" data-execution_count="63">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>table3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="63">
 <div><style>
@@ -5874,7 +5872,7 @@ for wide formats.</p></li>
 </ol>
 <p>Here are some examples of how Polars &amp; Plotly work with tidy
 data:</p>
-<div id="ed5c2621" class="cell" data-execution_count="64">
+<div id="7a366457" class="cell" data-execution_count="64">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute rate per 10,000</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>table1.with_columns(</span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>    rate <span class="op">=</span> pl.col(<span class="st">"cases"</span>) <span class="op">/</span> pl.col(<span class="st">"population"</span>) <span class="op">*</span> <span class="dv">1000</span></span>
@@ -5953,7 +5951,7 @@ data:</p>
 </div>
 </div>
 </div>
-<div id="8c0a9e67" class="cell" data-execution_count="65">
+<div id="d06f43e8" class="cell" data-execution_count="65">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute total cases per year</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>table1.group_by(<span class="st">"year"</span>).agg(total_cases <span class="op">=</span> pl.col(<span class="st">"cases"</span>).<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="65">
@@ -5990,7 +5988,7 @@ data:</p>
 </div>
 </div>
 </div>
-<div id="81a71216" class="cell" data-execution_count="66">
+<div id="75c59cea" class="cell" data-execution_count="66">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize changes over time</span></span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>table1_datefix <span class="op">=</span> table1.with_columns(</span>
@@ -6055,7 +6053,7 @@ most common case. Let’s dive into some examples.</p>
 Data in column names</h4>
 <p>The <code>billboard</code> dataset records the billboard rank of
 songs in the year 2000:</p>
-<div id="41d626c4" class="cell" data-execution_count="68">
+<div id="53ed7367" class="cell" data-execution_count="68">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>billboard</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="68">
 <div><style>
@@ -6930,7 +6928,7 @@ in each week. Here, the column names are one variable (the
 <code>week</code>) and the cell values are another (the
 <code>rank</code>).</p>
 <p>To tidy this data, we’ll use <code>DataFrame.unpivot()</code>:</p>
-<div id="0833abd1" class="cell" data-execution_count="69">
+<div id="b2675e6a" class="cell" data-execution_count="69">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>billboard.unpivot(</span>
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"artist"</span>, <span class="st">"track"</span>, <span class="st">"date.entered"</span>],</span>
 <span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"week"</span>,</span>
@@ -7043,7 +7041,7 @@ values, we named that variable <code>rank</code>.</li>
 <p>Now let’s turn our attention to the resulting, longer data frame.
 What happens if a song is in the top 100 for less than 76 weeks? Take 2
 Pack’s “Baby Don’t Cry”, for example:</p>
-<div id="eb65c55c" class="cell" data-execution_count="70">
+<div id="2da0d110" class="cell" data-execution_count="70">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>billboard.unpivot(</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"artist"</span>, <span class="st">"track"</span>, <span class="st">"date.entered"</span>],</span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"week"</span>,</span>
@@ -7151,7 +7149,7 @@ Pack’s “Baby Don’t Cry”, for example:</p>
 song wasn’t ranked in (at least) weeks 74-76. These <code>null</code>s
 don’t really represent unknown observations; they were forced to exist
 by the structure of the dataset, so we can safely filter them out:</p>
-<div id="b864b971" class="cell" data-execution_count="71">
+<div id="c8ffa978" class="cell" data-execution_count="71">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>billboard.unpivot(</span>
 <span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"artist"</span>, <span class="st">"track"</span>, <span class="st">"date.entered"</span>],</span>
 <span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"week"</span>,</span>
@@ -7264,7 +7262,7 @@ that additional columns <code>wk77</code>, <code>wk78</code>,
 easier by converting values of <code>week</code> and <code>rank</code>
 from character strings to numbers using
 <code>DataFrame.with_columns()</code>.</p>
-<div id="cd790d15" class="cell" data-execution_count="72">
+<div id="8261e211" class="cell" data-execution_count="72">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>billboard_longer <span class="op">=</span> (</span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>    billboard</span>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>    .unpivot(</span>
@@ -7378,7 +7376,7 @@ from character strings to numbers using
 <p>Now that we have all the week numbers in one variable and all the
 rank values in another, we’re in a good position to visualize how song
 ranks vary over time.</p>
-<div id="198fa534" class="cell" data-execution_count="73">
+<div id="1a991b81" class="cell" data-execution_count="73">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>px.line(</span>
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    billboard_longer, x<span class="op">=</span><span class="st">"week"</span>, y<span class="op">=</span><span class="st">"rank"</span>, line_group<span class="op">=</span><span class="st">"track"</span></span>
 <span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>).update_traces( <span class="co"># we'll learn more about these extra methods in a later module</span></span>
@@ -7402,7 +7400,7 @@ to the data. Let’s start with a very simple dataset to make it easier to
 see what’s happening. Suppose we have three patients with
 <code>id</code>s A, B, and C, and we take two blood pressure
 measurements on each patient.</p>
-<div id="6a9b3d1c" class="cell" data-execution_count="74">
+<div id="d4f48776" class="cell" data-execution_count="74">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.from_dict({</span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"id"</span>:  [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>],</span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bp1"</span>: [<span class="dv">100</span>, <span class="dv">140</span>, <span class="dv">120</span>],</span>
@@ -7457,7 +7455,7 @@ measurements on each patient.</p>
 (already exists), <code>measurement</code> (the column names), and
 <code>value</code> (the cell values). To achieve this, we need to pivot
 <code>df</code> longer:</p>
-<div id="d1109bd6" class="cell" data-execution_count="75">
+<div id="34a5c190" class="cell" data-execution_count="75">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>df.unpivot(</span>
 <span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"measurement"</span>,</span>
@@ -7564,7 +7562,7 @@ information crammed into the column names, and you would like to store
 these in separate new variables. For example, take the <code>who</code>
 dataset, the source of <code>table1</code> and friends you saw
 above:</p>
-<div id="3ff9f6bc" class="cell" data-execution_count="77">
+<div id="fb49f602" class="cell" data-execution_count="77">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>who2.glimpse()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 7240
@@ -7657,7 +7655,7 @@ separate columns:</p>
 <ol type="1">
 <li>Unpivot:</li>
 </ol>
-<div id="fdb21a7e" class="cell" data-execution_count="78">
+<div id="cae4f327" class="cell" data-execution_count="78">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>step1 <span class="op">=</span> who2.unpivot(</span>
 <span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"country"</span>, <span class="st">"year"</span>],</span>
 <span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"key"</span>,</span>
@@ -7753,7 +7751,7 @@ separate columns:</p>
 <li>Split the <code>key</code> column into <code>diagnosis</code>,
 <code>gender</code>, and <code>age</code> columns:</li>
 </ol>
-<div id="ef3abc2a" class="cell" data-execution_count="79">
+<div id="4a60537c" class="cell" data-execution_count="79">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>step2 <span class="op">=</span> step1.with_columns(</span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"key"</span>).<span class="bu">str</span>.split(<span class="st">"_"</span>)</span>
 <span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -7846,7 +7844,7 @@ separate columns:</p>
 <ol start="3" type="1">
 <li>Extract each list element into a new column:</li>
 </ol>
-<div id="8ac7fc6f" class="cell" data-execution_count="80">
+<div id="99067909" class="cell" data-execution_count="80">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>step3 <span class="op">=</span> step2.select(</span>
 <span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"country"</span>),</span>
 <span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"year"</span>),</span>
@@ -7964,7 +7962,7 @@ separate columns:</p>
 </div>
 </div>
 <p>All together:</p>
-<div id="9366b92b" class="cell" data-execution_count="81">
+<div id="3bbd27cd" class="cell" data-execution_count="81">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>    who2.unpivot(</span>
 <span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="st">"country"</span>, <span class="st">"year"</span>], variable_name<span class="op">=</span><span class="st">"key"</span>, value_name<span class="op">=</span><span class="st">"count"</span></span>
@@ -7985,7 +7983,7 @@ separate columns:</p>
 <p>While the above steps break down the process to understand easier,
 here is a more concise, albeit more advanced, way to achieve the same
 results:</p>
-<div id="f8b6ef49" class="cell" data-execution_count="82">
+<div id="119eff6e" class="cell" data-execution_count="82">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>    who2.unpivot(</span>
 <span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="st">"country"</span>, <span class="st">"year"</span>], </span>
@@ -8132,7 +8130,7 @@ lot when dealing with governmental data.</p>
 <p>We’ll start by looking at <code>cms_patient_experience</code>, a
 dataset from the Centers of Medicare and Medicaid services that collects
 data about patient experiences:</p>
-<div id="de05eb3b" class="cell" data-execution_count="84">
+<div id="771b34cc" class="cell" data-execution_count="84">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>cms_patient_experience</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="83">
 <div><style>
@@ -8234,7 +8232,7 @@ is spread across six rows, with one row for each measurement taken in
 the survey organization. We can see the complete set of values for
 <code>measure_cd</code> and <code>measure_title</code> by using
 <code>DataFrame.unique().select()</code>:</p>
-<div id="95b8c69e" class="cell" data-execution_count="85">
+<div id="e85d7b61" class="cell" data-execution_count="85">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"measure_cd"</span>, <span class="st">"measure_title"</span>]</span>
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>cms_patient_experience.unique(subset<span class="op">=</span>cols).select(cols).sort(cols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -8299,7 +8297,7 @@ interface than <code>DataFrame.unpivot()</code>: you still select the
 <code>index</code> columns (the columns that remain), but now you select
 which column the <code>values</code> will come from, and which column
 the names come from (<code>on</code>).</p>
-<div id="2e55b7c1" class="cell" data-execution_count="86">
+<div id="6a284f93" class="cell" data-execution_count="86">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>cms_patient_experience.pivot(</span>
 <span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"org_pac_id"</span>, <span class="st">"org_nm"</span>],</span>
 <span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"measure_cd"</span>], <span class="co"># Notice we don't use `measure_title`</span></span>
@@ -8440,7 +8438,7 @@ How does <code>DataFrame.pivot()</code> work?</h4>
 start with a very simple dataset. This time we have two patients with
 <code>id</code>s A and B, we have three blood pressure measurements on
 patient A and two on patient B:</p>
-<div id="69829808" class="cell" data-execution_count="87">
+<div id="ef9b0732" class="cell" data-execution_count="87">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.from_dict({</span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"id"</span>: [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>],</span>
 <span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"measurement"</span>: [<span class="st">"bp1"</span>, <span class="st">"bp1"</span>, <span class="st">"bp2"</span>, <span class="st">"bp2"</span>, <span class="st">"bp3"</span>],</span>
@@ -8449,7 +8447,7 @@ patient A and two on patient B:</p>
 </div>
 <p>We’ll take the values from the <code>value</code> column and the
 names from the <code>measurement</code> column:</p>
-<div id="d49da930" class="cell" data-execution_count="88">
+<div id="ffd0f58b" class="cell" data-execution_count="88">
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>df.pivot(on<span class="op">=</span><span class="st">"measurement"</span>, values<span class="op">=</span><span class="st">"value"</span>) <span class="co"># unused cols get put in `index`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="87">
 <div><style>
@@ -8496,7 +8494,7 @@ names from the <code>measurement</code> column:</p>
 <p>To begin the process, <code>DataFrame.pivot()</code> needs to first
 figure out what will go in the rows and columns. The new column names
 will be the unique values of <code>measurement</code>.</p>
-<div id="00e5630b" class="cell" data-execution_count="89">
+<div id="0d02f26e" class="cell" data-execution_count="89">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>df.select(<span class="st">"measurement"</span>).unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="88">
 <div><style>
@@ -8535,7 +8533,7 @@ will be the unique values of <code>measurement</code>.</p>
 variables that aren’t going into the new names or values. These are
 called the <code>index</code> columns. Here there is only one column,
 but in general there can be any number.</p>
-<div id="1db35526" class="cell" data-execution_count="90">
+<div id="68273a8c" class="cell" data-execution_count="90">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df.select(pl.exclude(<span class="st">"measurement"</span>, <span class="st">"value"</span>)).unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="89">
 <div><style>
@@ -8557,10 +8555,10 @@ but in general there can be any number.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>"A"</td>
+<td>"B"</td>
 </tr>
 <tr class="even">
-<td>"B"</td>
+<td>"A"</td>
 </tr>
 </tbody>
 </table>
@@ -8569,7 +8567,7 @@ but in general there can be any number.</p>
 </div>
 <p><code>DataFrame.pivot()</code> then combines these results to
 generate an empty data frame:</p>
-<div id="697dbb62" class="cell" data-execution_count="91">
+<div id="3885e80e" class="cell" data-execution_count="91">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>df.select(pl.exclude(<span class="st">"measurement"</span>, <span class="st">"value"</span>)).unique().with_columns(</span>
 <span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>pl.lit(<span class="va">None</span>), y<span class="op">=</span>pl.lit(<span class="va">None</span>), z<span class="op">=</span>pl.lit(<span class="va">None</span>)</span>
 <span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -8599,13 +8597,13 @@ generate an empty data frame:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>"A"</td>
+<td>"B"</td>
 <td>null</td>
 <td>null</td>
 <td>null</td>
 </tr>
 <tr class="even">
-<td>"B"</td>
+<td>"A"</td>
 <td>null</td>
 <td>null</td>
 <td>null</td>
@@ -8627,7 +8625,7 @@ Data and variable names in the column headers</h4>
 same set of steps to tidy our data. This step up in complexity is when
 the column names include a mix of variable values and variable names.
 For example, take the <code>household</code> dataset:</p>
-<div id="7224c5bd" class="cell" data-execution_count="92">
+<div id="26cc1d7e" class="cell" data-execution_count="92">
 <div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>household <span class="op">=</span> pl.from_dict({</span>
 <span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"family"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</span>
 <span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dob_child1"</span>: [<span class="st">"1998-11-26"</span>, <span class="st">"1996-06-22"</span>, <span class="st">"2002-07-11"</span>, <span class="st">"2004-10-10"</span>, <span class="st">"2000-12-05"</span>],</span>
@@ -8711,7 +8709,7 @@ dates of birth of up to two children. The new challenge in this dataset
 is that the column names contain the names of two variables
 (<code>dob</code>, <code>name</code>) and the values of another
 (<code>child</code>, with values 1 or 2).</p>
-<div id="9c1f50cc" class="cell" data-execution_count="93">
+<div id="68d4bcbd" class="cell" data-execution_count="93">
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># First, unpivot the data frame to create rows for each family-column combination</span></span>
 <span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>    household.unpivot(index<span class="op">=</span><span class="st">"family"</span>)</span>
@@ -8845,20 +8843,21 @@ consider switching up the organization of your data; don’t be afraid to
 untidy, transform, and re-tidy as needed!</p>
 </section>
 </section>
-<section id="data-import" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="data-import"><span class="header-section-number">5</span> Data
-import</h2>
+<section id="data-import-export" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="data-import-export"><span class="header-section-number">5</span> Data
+import &amp; export</h2>
 <p>Working with data provided by Python packages is a great way to learn
 data science tools, but at some point, you’ll want to apply what you’ve
-learned to your own data. In this chapter, you’ll learn the basics of
-reading data files into Python.</p>
+learned to your own data. In this section, you’ll learn the basics of
+reading data files into Python and how to export them for others (or
+yourself in the future) to use.</p>
 <p>Specifically, this chapter will focus on reading plain-text
 rectangular files. We’ll start with practical advice for handling
 features like column names, types, and missing data. You will then learn
 about reading data from multiple files at once and writing data from
 Python to a file. Finally, you’ll learn how to handcraft data frames in
-Python.</p>
-<div id="946bf261" class="cell" data-execution_count="94">
+Python, and export them with Polars functions.</p>
+<div id="36f7b841" class="cell" data-execution_count="94">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io <span class="co"># we'll use this to "create" CSVs within Python examples</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -8946,7 +8945,7 @@ The first argument is the most important: the path to the file. You can
 think about the path as the address of the file: the file is called
 <code>students.csv</code> and it lives in the <code>data</code>
 folder.</p>
-<div id="bbc2f3fe" class="cell" data-execution_count="95">
+<div id="ca4b9567" class="cell" data-execution_count="95">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> pl.read_csv(<span class="st">"data/students.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The code above will work if you have the students.csv file in a data
@@ -8956,7 +8955,7 @@ folder in your project. You can also read it directly from a URL:</p>
 and automatically infer column types based on the data it contains.
 Polars doesn’t print a detailed message about column specifications by
 default, but you can examine the schema to see the inferred types:</p>
-<div id="b4d5df60" class="cell" data-execution_count="96">
+<div id="c6cfee23" class="cell" data-execution_count="96">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>students.schema.to_frame()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="95">
 <div><style>
@@ -8997,7 +8996,7 @@ Practical advice</h4>
 it in some way to make it easier to work with in the rest of your
 analysis. Let’s take another look at the students data with that in
 mind.</p>
-<div id="3321029a" class="cell" data-execution_count="97">
+<div id="70375ddf" class="cell" data-execution_count="97">
 <div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>students</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="96">
 <div><style>
@@ -9079,7 +9078,7 @@ recognize as “not available”. This is something we can address using the
 <code>null_values</code> argument. By default, Polars only recognizes
 empty strings and the string “null” (case-insensitive) as missing
 values.</p>
-<div id="cf5eceb3" class="cell" data-execution_count="98">
+<div id="39b64316" class="cell" data-execution_count="98">
 <div class="sourceCode cell-code" id="cb102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> pl.read_csv(</span>
 <span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"data/students.csv"</span>, </span>
 <span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>    null_values<span class="op">=</span>[<span class="st">"N/A"</span>, <span class="st">""</span>]</span>
@@ -9165,7 +9164,7 @@ values.</p>
 awkward to work with in code. In Polars, you can refer to these columns
 using either bracket notation or with the <code>.</code> accessor, but
 the latter won’t work with spaces or special characters:</p>
-<div id="796d9ded" class="cell" data-execution_count="99">
+<div id="5ae529f8" class="cell" data-execution_count="99">
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Works with spaces</span></span>
 <span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>first_student_name <span class="op">=</span> students[<span class="st">"Full Name"</span>][<span class="dv">0</span>]</span>
 <span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(first_student_name)</span>
@@ -9184,7 +9183,7 @@ the latter won’t work with spaces or special characters:</p>
 </div>
 <p>It’s often a good idea to rename these columns to follow Python
 naming conventions. Here’s how you can rename specific columns:</p>
-<div id="cb501aab" class="cell" data-execution_count="100">
+<div id="a02d100b" class="cell" data-execution_count="100">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> students.rename({</span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Student ID"</span>: <span class="st">"student_id"</span>,</span>
 <span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Full Name"</span>: <span class="st">"full_name"</span></span>
@@ -9268,7 +9267,7 @@ naming conventions. Here’s how you can rename specific columns:</p>
 <p>An alternative approach is to use a function to clean all column
 names at once. Polars doesn’t have a built-in function for this, but we
 can easily create one:</p>
-<div id="1d8b6aa3" class="cell" data-execution_count="101">
+<div id="dcc21fd1" class="cell" data-execution_count="101">
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_names(df):</span>
 <span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.rename({col: col.lower().replace(<span class="st">" "</span>, <span class="st">"_"</span>).replace(<span class="st">"."</span>, <span class="st">"_"</span>) <span class="cf">for</span> col <span class="kw">in</span> df.columns})</span>
 <span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -9352,7 +9351,7 @@ can easily create one:</p>
 types. For example, <code>meal_plan</code> is a categorical variable
 with a known set of possible values, which in Python should be
 represented as a category:</p>
-<div id="56a056a4" class="cell" data-execution_count="102">
+<div id="518ae05a" class="cell" data-execution_count="102">
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> students.with_columns(</span>
 <span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"mealplan"</span>).cast(pl.Categorical)</span>
 <span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -9434,7 +9433,7 @@ represented as a category:</p>
 <p>Before you analyze this dataset, you’ll probably want to fix the age
 column. Currently, <code>age</code> contains mixed types because one
 observation is typed out as “five” instead of the number 5:</p>
-<div id="5aee862d" class="cell" data-execution_count="103">
+<div id="bc96f9fd" class="cell" data-execution_count="103">
 <div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> students.with_columns(</span>
 <span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>    age<span class="op">=</span>pl.when(pl.col(<span class="st">"age"</span>) <span class="op">==</span> <span class="st">"five"</span>)</span>
 <span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>    .then(pl.lit(<span class="dv">5</span>))</span>
@@ -9530,7 +9529,7 @@ Other arguments</h4>
 for the column names, which is a very common convention. But it’s not
 uncommon for a few lines of metadata to be included at the top of the
 file. You can use <code>skip_rows</code> to skip the first n lines:</p>
-<div id="f2e9f856" class="cell" data-execution_count="104">
+<div id="107acb56" class="cell" data-execution_count="104">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>csv_data <span class="op">=</span> <span class="st">"""The first line of metadata</span></span>
 <span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="st">The second line of metadata</span></span>
 <span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a><span class="st">x,y,z </span></span>
@@ -9573,7 +9572,7 @@ file. You can use <code>skip_rows</code> to skip the first n lines:</p>
 <p>In other cases, the data might not have column names. You can use
 <code>has_header=False</code> to tell Polars not to treat the first row
 as headings:</p>
-<div id="2e035ebc" class="cell" data-execution_count="105">
+<div id="bd119b93" class="cell" data-execution_count="105">
 <div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>csv_data <span class="op">=</span> <span class="st">"""1,2,3</span></span>
 <span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="st">4,5,6"""</span></span>
 <span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -9619,7 +9618,7 @@ as headings:</p>
 <p>By default, Polars will name the columns “column_1”, “column_2”, etc.
 You can provide your own column names with the <code>new_columns</code>
 parameter:</p>
-<div id="58502f9f" class="cell" data-execution_count="106">
+<div id="c1951e5e" class="cell" data-execution_count="106">
 <div class="sourceCode cell-code" id="cb110"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>csv_data <span class="op">=</span> <span class="st">"""1,2,3</span></span>
 <span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="st">4,5,6"""</span></span>
 <span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -9721,7 +9720,7 @@ all numeric, it’s a floating-point type. - If values match a date or
 datetime pattern, it’s a date or datetime type. - Otherwise, it’s a
 string type.</p>
 <p>You can see that behavior with a simple example:</p>
-<div id="3b0877a4" class="cell" data-execution_count="107">
+<div id="0300b536" class="cell" data-execution_count="107">
 <div class="sourceCode cell-code" id="cb111"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>csv_data <span class="op">=</span> <span class="st">"""logical,numeric,date,string</span></span>
 <span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="st">TRUE,1,2021-01-15,abc</span></span>
 <span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a><span class="st">false,4.5,2021-02-15,def</span></span>
@@ -9789,7 +9788,7 @@ specific type. One of the most common causes is a missing value recorded
 using something other than the <code>None</code> that Polars
 expects.</p>
 <p>Take this simple 1-column CSV file as an example:</p>
-<div id="83c5a4c4" class="cell" data-execution_count="108">
+<div id="efcd6963" class="cell" data-execution_count="108">
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>simple_csv <span class="op">=</span> <span class="st">"""x</span></span>
 <span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="st">10</span></span>
 <span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a><span class="st">.</span></span>
@@ -9841,7 +9840,7 @@ with only a few missing values represented by <code>.</code>s scattered
 throughout?</p>
 <p>In Polars, you can specify the column type and tell it what values
 should be treated as null:</p>
-<div id="3525de1c" class="cell" data-execution_count="109">
+<div id="a37409a6" class="cell" data-execution_count="109">
 <div class="sourceCode cell-code" id="cb113"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>pl.read_csv(</span>
 <span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>    io.StringIO(simple_csv),</span>
 <span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a>    schema_overrides<span class="op">=</span>{<span class="st">"x"</span>: pl.Int64},</span>
@@ -9913,7 +9912,7 @@ types</li>
 parameter when reading data</li>
 <li>Using <code>cast()</code> to convert columns after reading</li>
 </ol>
-<div id="e42f2723" class="cell" data-execution_count="110">
+<div id="c8500425" class="cell" data-execution_count="110">
 <div class="sourceCode cell-code" id="cb114"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify types when reading</span></span>
 <span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>csv_data <span class="op">=</span> <span class="st">"""x,y,z</span></span>
 <span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="st">1,2,3"""</span></span>
@@ -9942,7 +9941,7 @@ Schema({'x': Int32, 'y': Float64, 'z': String})</code></pre>
 </div>
 </div>
 <p>You can also specify a schema for all columns at once:</p>
-<div id="5ad8d223" class="cell" data-execution_count="111">
+<div id="86ef7278" class="cell" data-execution_count="111">
 <div class="sourceCode cell-code" id="cb116"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>schema <span class="op">=</span> {<span class="st">"x"</span>: pl.Int32, <span class="st">"y"</span>: pl.Float64, <span class="st">"z"</span>: pl.Utf8}</span>
 <span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.read_csv(io.StringIO(csv_data), schema<span class="op">=</span>schema)</span>
 <span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.schema)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -9952,7 +9951,7 @@ Schema({'x': Int32, 'y': Float64, 'z': String})</code></pre>
 </div>
 <p>If you want to select only specific columns when reading a file, you
 can use the <code>columns</code> parameter:</p>
-<div id="caa00f9d" class="cell" data-execution_count="112">
+<div id="f1ea49ed" class="cell" data-execution_count="112">
 <div class="sourceCode cell-code" id="cb118"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.read_csv(io.StringIO(csv_data), columns<span class="op">=</span>[<span class="st">"x"</span>])</span>
 <span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -10023,14 +10022,14 @@ chapter, or read them directly:</p>
 <span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>sales_files <span class="op">=</span> glob.glob(<span class="st">"data/*-sales.csv"</span>)</span>
 <span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>sales_files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-</section>
-<section id="writing-to-a-file" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="writing-to-a-file"><span class="header-section-number">6</span> Writing
-to a file</h2>
+<section id="writing-to-a-file" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="writing-to-a-file"><span class="header-section-number">5.4</span>
+Writing to a file</h3>
 <p>Polars provides several functions for writing data to disk. The most
 common are <code>write_csv()</code> and <code>write_parquet()</code>.
-The most important arguments to these functions are the DataFrame to
-save and the file path where you want to save it.</p>
+The most important arguments to these functions are the
+<code>DataFrame</code> to save and the file path where you want to save
+it.</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>students.write_csv(<span class="st">"students.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now let’s read that CSV file back in. Note that the variable type
 information you set up is lost when you save to CSV because you’re
@@ -10054,14 +10053,15 @@ format</a> through libraries like <code>joblib</code>:</li>
 <span id="cb125-5"><a href="#cb125-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(joblib_students)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Parquet is usually preferable because it’s cross-language compatible,
 more efficient, and maintains your data types.</p>
-<section id="data-entry" class="level3" data-number="6.1">
-<h3 data-number="6.1" class="anchored" data-anchor-id="data-entry"><span class="header-section-number">6.1</span>
+</section>
+<section id="data-entry" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="data-entry"><span class="header-section-number">5.5</span>
 Data entry</h3>
 <p>Sometimes you’ll need to assemble a <code>DataFrame</code> “by hand”
 with a little data entry in your Python script. Polars provides a simple
 way to create data frames from dictionaries where each key is a column
 name and each value is a list of values:</p>
-<div id="7112f5da" class="cell" data-execution_count="113">
+<div id="bebd9200" class="cell" data-execution_count="113">
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.DataFrame({</span>
 <span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>],</span>
 <span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"y"</span>: [<span class="st">"h"</span>, <span class="st">"m"</span>, <span class="st">"g"</span>],</span>
@@ -10114,7 +10114,7 @@ name and each value is a list of values:</p>
 </div>
 <p>You can also create a data frame from a list of dictionaries, where
 each dictionary represents a row:</p>
-<div id="3dd336c7" class="cell" data-execution_count="114">
+<div id="d493a332" class="cell" data-execution_count="114">
 <div class="sourceCode cell-code" id="cb127"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.DataFrame([</span>
 <span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"x"</span>: <span class="dv">1</span>, <span class="st">"y"</span>: <span class="st">"h"</span>, <span class="st">"z"</span>: <span class="fl">0.08</span>},</span>
 <span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"x"</span>: <span class="dv">2</span>, <span class="st">"y"</span>: <span class="st">"m"</span>, <span class="st">"z"</span>: <span class="fl">0.83</span>},</span>
@@ -10166,8 +10166,8 @@ each dictionary represents a row:</p>
 </div>
 </div>
 </section>
-<section id="summary-3" class="level3" data-number="6.2">
-<h3 data-number="6.2" class="anchored" data-anchor-id="summary-3"><span class="header-section-number">6.2</span>
+<section id="summary-3" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="summary-3"><span class="header-section-number">5.6</span>
 Summary</h3>
 <p>In this section, you’ve learned how to load CSV files with Polars’
 <code>pl.read_csv()</code> and how to do your own data entry by creating
@@ -10184,8 +10184,8 @@ you’ll appreciate Polars’ performance benefits and elegant API
 design.</p>
 </section>
 </section>
-<section id="exercises" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">7</span>
+<section id="exercises" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="exercises"><span class="header-section-number">6</span>
 Exercises</h2>
 <ol type="1">
 <li><p>Does it matter what order you used
@@ -10196,7 +10196,7 @@ work the functions would have to do.</p></li>
 multiple times in a <code>DataFrame.select()</code> call?</p></li>
 <li><p>Using the <code>penguins</code> dataset, make a scatter plot of
 <code>bill_depth_mm</code> vs.&nbsp;<code>bill_length_mm</code>. That is,
-make a scatterplot with <code>bill_depth_mm</code> on the y-axis and
+make a scatter plot with <code>bill_depth_mm</code> on the y-axis and
 <code>bill_length_mm</code> on the x-axis. Describe the relationship
 between these two variables.</p></li>
 <li><p>From the <code>flights</code> dataset, compare

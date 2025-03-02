@@ -1293,11 +1293,11 @@ In this section, you learned about tidy data: data that has variables in columns
 
 Another challenge is that, for a given dataset, it can be impossible to label the longer or the wider version as the "tidy" one. This is partly a reflection of our definition of tidy data, where we said tidy data has one variable in each column, but we didn’t actually define what a variable is (and it’s surprisingly hard to do so). It’s totally fine to be pragmatic and to say a variable is whatever makes your analysis easiest. So if you’re stuck figuring out how to do some computation, consider switching up the organization of your data; don’t be afraid to untidy, transform, and re-tidy as needed!
 
-## Data import
+## Data import & export
 
-Working with data provided by Python packages is a great way to learn data science tools, but at some point, you'll want to apply what you've learned to your own data. In this chapter, you'll learn the basics of reading data files into Python.
+Working with data provided by Python packages is a great way to learn data science tools, but at some point, you'll want to apply what you've learned to your own data. In this section, you'll learn the basics of reading data files into Python and how to export them for others (or yourself in the future) to use.
 
-Specifically, this chapter will focus on reading plain-text rectangular files. We'll start with practical advice for handling features like column names, types, and missing data. You will then learn about reading data from multiple files at once and writing data from Python to a file. Finally, you'll learn how to handcraft data frames in Python.
+Specifically, this chapter will focus on reading plain-text rectangular files. We'll start with practical advice for handling features like column names, types, and missing data. You will then learn about reading data from multiple files at once and writing data from Python to a file. Finally, you'll learn how to handcraft data frames in Python, and export them with Polars functions.
 
 ```{python}
 import polars as pl
@@ -1641,9 +1641,9 @@ sales_files = glob.glob("data/*-sales.csv")
 sales_files
 ```
 
-## Writing to a file
+### Writing to a file
 
-Polars provides several functions for writing data to disk. The most common are `write_csv()` and `write_parquet()`. The most important arguments to these functions are the DataFrame to save and the file path where you want to save it.
+Polars provides several functions for writing data to disk. The most common are `write_csv()` and `write_parquet()`. The most important arguments to these functions are the `DataFrame` to save and the file path where you want to save it.
 
 ```python
 students.write_csv("students.csv")
@@ -1710,7 +1710,7 @@ Polars is an excellent choice for data handling, as it's designed to take advant
 
 2. What happens if you specify the name of the same variable multiple times in a `DataFrame.select()` call?
 
-3. Using the `penguins` dataset, make a scatter plot of `bill_depth_mm` vs. `bill_length_mm`. That is, make a scatterplot with `bill_depth_mm` on the y-axis and `bill_length_mm` on the x-axis. Describe the relationship between these two variables.
+3. Using the `penguins` dataset, make a scatter plot of `bill_depth_mm` vs. `bill_length_mm`. That is, make a scatter plot with `bill_depth_mm` on the y-axis and `bill_length_mm` on the x-axis. Describe the relationship between these two variables.
 
 4. From the `flights` dataset, compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
 

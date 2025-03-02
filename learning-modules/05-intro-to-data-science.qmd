@@ -1390,15 +1390,50 @@ students = students.rename({
 students
 ```
 
-An alternative approach is to use a function to clean all column names at once. Polars doesn't have a built-in function for this, but we can easily create one:
+An alternative approach is to use a function to clean all column names at once. Polars doesn't have a built-in function for this, but we can use a special shortcut called a lambda function to do this in one line. Think of a lambda function as a mini-function that you can write directly where you need it, without having to define it separately. It's like giving Polars quick instructions on how to transform each column name.
 
 ```{python}
-def clean_names(df):
-    return df.rename({col: col.lower().replace(" ", "_").replace(".", "_") for col in df.columns})
-
-students = clean_names(students)
-students
+students = (
+    students.rename(
+        lambda col_name: col_name.lower().replace(" ", "_").replace(".", "_")
+    )
+)
 ```
+
+With this code, we are telling Polars to take each **column name** (not the values of the columns), call it `col`, and do these three things to it:
+
+1. Convert it to lowercase
+2. Replace any spaces with underscores
+3. Replace any periods with underscores
+
+Note that these are the string methods we learned earlier in this course, not functions that come from Polars. `col_name` has the type `str`.
+
+Like in `for` loops, it doesn't matter what the looping (or lambda) variable is called. I just called it `col_name` because that *is* what we are effecting. I could've also called it `x` and it would work the same:
+
+```python
+students = (
+    students.rename(
+        lambda x: x.lower().replace(" ", "_").replace(".", "_")
+    )
+)
+```
+
+If you wanted to use a regular function, you could do something like this:
+
+```python
+def clean_col_name(col_name):
+    return col_name.lower().replace(" ", "_").replace(".", "_")
+
+students = students.rename(clean_column_name) 
+# Note: no parentheses here, we're passing the function itself
+```
+
+When would you want to use a named/user-defined function over a lambda function? It comes down to how many times you would repeat the steps. If you are working with only one data frame, a lambda function might be quicker to write, but if you are going to clean multiple data frames in the same script, creating a named function to use over again would be the better method.
+
+::: {.callout-note}
+You can use this code snippet to help you with your labs and tests. You don't need to fully understand lambda functions for this course, but you can think of this specific pattern as a helpful 'recipe' for cleaning column names in one step while keeping your code clean and readable.
+If you ever need to customize how column names are cleaned, you can just adjust what happens inside the lambda function. The Polars [documentation](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.rename.html) for `DataFrame.rename()` has another example using lambda functions to rename columns.
+:::
 
 Another common task after reading in data is to consider variable types. For example, `meal_plan` is a categorical variable with a known set of possible values, which in Python should be represented as a category:
 
@@ -1416,7 +1451,7 @@ students = students.with_columns(
     age=pl.when(pl.col("age") == "five")
     .then(pl.lit(5))
     .otherwise(pl.col("age").cast(pl.Int64, strict=False))
-)
+) # This is conceptually very similar to Python's built in if-elif-else
 
 students
 ```

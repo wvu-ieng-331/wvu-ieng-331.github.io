@@ -8,6 +8,7 @@ dependencies = [
     "billboard>=0.4.0",
     "ipython>=8.31.0",
     "jupyter>=1.1.1",
+    "marimo>=0.11.14",
     "matplotlib>=3.10.0",
     "nycflights13>=0.0.3",
     "palmerpenguins>=0.1.4",
